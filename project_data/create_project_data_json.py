@@ -40,6 +40,7 @@ def write_project_data():
         }
         data[type.lower()].append(item)
 
+    data['projects_page'] = 1
     data[u'product_mantra'] = unicode("I believe the secret to great products is to continually ask 'why?' and then serve that deepest need.")
     data[u'development_mantra'] = unicode("Everyone should be able to write and understand code at a basic level.")
     data[u'data_mantra'] = unicode("Intuition is fantastic, intuition backed by robust data, even better.")
