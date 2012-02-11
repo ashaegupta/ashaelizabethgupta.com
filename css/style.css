@@ -1,0 +1,139 @@
+body {
+    /* default text settings */
+    font-family: "Helvetica Neue", Arial, Helvetica, sans-serif;
+    font-size:12.5;
+    color: #888888;
+}
+a {
+    text-decoration: none;
+    color: #888888;
+}
+
+.all_content {
+    width: 850;
+    margin-left: auto;
+    margin-right: auto;
+    line-height: 19px;
+}
+
+/*
+ * header
+ */
+.header {
+    height: auto;
+    vertical-align: top;
+    float: right;
+}
+.clear {
+    clear:both;
+}
+.header a.selected {
+    font-weight: bold;
+    color: black;
+}
+.header a:hover {
+    font-weight: bold;
+    color: black;
+}
+.header_columns {
+    display: inline-block;
+}
+ul {
+    list-style-type: none;
+    padding-left: 20px;
+    margin-top: 0px;
+    width: 60;
+}
+li {
+    height: 17;
+}
+
+/*
+ * the body of the page
+ */
+.main_content {
+    margin-top: 10;
+}
+.heading {
+    /* The headings of each page, not the header with links - e.g. 'Hi there!' */
+    font-family: "Gill Sans", Arial, Helvetica, sans-serif;
+    font-size:46;
+    color: black;
+    margin-bottom: 25px;
+}
+
+/*
+ * homepage
+ */
+.main_homepage_text {
+    width: 650;
+}
+.main_homepage_text a {
+    color: #A878E3;
+    font-weight: bold;
+    text-decoration: none;
+    line-height: 120%;
+}
+.image {
+    width: 450;
+    margin-top: 20;
+}
+
+/*
+ * projects page 
+ */
+#project_categories_header {
+    padding-top: 10px;
+    padding-bottom: 10px;
+    border-bottom: 3px solid black;
+    margin-bottom: 20px;
+}
+.project_category {
+    display: inline-block;
+    width: 24%;
+}
+.project_list {
+    padding: 20px;
+    display: none;    
+}
+.project_category_purple_bar {
+    border-radius: 10px;
+    background: #A878E3;
+    height: 6px;
+    margin-bottom: 3px;
+    display: none;
+}
+.project_mantra {
+    color: #A878E3;
+    margin-bottom: 20px;
+    font-size: 14px;
+}
+.project {
+    margin-bottom:40px;
+}
+.project_image {
+    display: inline-block;
+    margin-right: 20px;
+    width: 170px;
+    vertical-align: top;
+}
+.project_body {
+    width: 600px;
+    display: inline-block;
+}
+.project_name {
+    display: inline-block;
+    margin-right: 20px;
+    font-weight: bold;
+    color: black;
+}
+.project_description_short {
+    display: inline-block;
+}
+.project_description_long {
+    margin-top: 10px;
+    color: black;
+}
+.project_tags {
+   margin-top: 10px; 
+}
