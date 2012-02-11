@@ -1,11 +1,33 @@
 <div class="project">
     <div class="project_image">
-        <img longdesc="{{p.picture}}"></img>
+            {% if p.company_url %}
+                <a href="p.company_url" target="_blank"><img longdesc="{{p.picture}}"></img></a>
+            {% else %}
+                {% if p.my_work_url %}
+                    <a href="p.my_work_url" target="_blank"><img longdesc="{{p.picture}}"></img></a>
+                {% else %}
+                    <img longdesc="{{p.picture}}"></img>
+                {% endif %}
+            {% endif %}
     </div>
     <div class="project_body">
-        <div class="project_name">{{p.name}}</div>
+        <div class="project_name">
+            {% if p.company_url %}
+                <a href="p.company_url" target="_blank">{{p.name}}</a>
+            {% else %}
+                {% if p.my_work_url %}
+                    <a href="p.my_work_url" target="_blank">{{p.name}}</a>
+                {% else %}
+                    {{p.name}}
+                {% endif %}
+            {% endif %}
+        </div>
         <div class="project_description_short">{{p.service}}</div>
-        <div class="project_description_long">{{p.description}}</div>
+        <div class="project_description_long">{{p.description}}
+            {% if p.company_url and p.my_work_url %}
+                <a href="{{p.my_work_url}}" target="_blank">More...</a>
+            {% endif %}
+        </div>
         <div class="project_tags">{{p.skills}}</div>
     </div>
 </div>
