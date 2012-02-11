@@ -51,9 +51,6 @@ li {
 /*
  * the body of the page
  */
-.main_content {
-    margin-top: 10;
-}
 .heading {
     /* The headings of each page, not the header with links - e.g. 'Hi there!' */
     font-family: "Gill Sans", Arial, Helvetica, sans-serif;
