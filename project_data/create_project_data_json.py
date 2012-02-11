@@ -9,10 +9,12 @@ def utf_8_encoder(unicode_csv_data):
         yield line.encode('utf-8')
 
 def write_project_data():
-    reader = csv.reader(utf_8_encoder(open(project_csv_file, 'rb')), delimiter=',')
+    print "reading csv file..."
+    reader = csv.reader(open(project_csv_file, 'rb'), delimiter=',')
     data = defaultdict(list)
+    print "creating dict..."
     for row in reader:
-        yield [unicode(cell, 'utf-8') for cell in row]
+        row = [unicode(cell, 'utf-8') for cell in row]
         try: type = row[0]
         except: type = ''
         try: name = row[1]
@@ -40,16 +42,20 @@ def write_project_data():
         }
         data[type.lower()].append(item)
 
+    print "adding other data..."
     data['projects_page'] = 1
     data[u'product_mantra'] = unicode("I believe the secret to great products is to continually ask 'why?' and then serve that deepest need.")
     data[u'development_mantra'] = unicode("Everyone should be able to write and understand code at a basic level.")
     data[u'data_mantra'] = unicode("Intuition is fantastic, intuition backed by robust data, even better.")
     data[u'personal_mantra'] = unicode("Life is what happens when you busy are making other plans. Spend time on things you care about.")
 
-    del data['type']
+    print "saving file..."
     data_str = "data = %s" % dict(data)
+    print data_str
     projects_data_file = open(projects_data_py_file, mode='w')
     projects_data_file.write(data_str)
 
 if __name__ == "__main__":
+    print "running..."
     write_project_data()
+    print "done."
