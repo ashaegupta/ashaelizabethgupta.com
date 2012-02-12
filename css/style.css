@@ -37,6 +37,11 @@ a {
 }
 .header_columns {
     display: inline-block;
+    vertical-align: top;
+}
+.header_image {
+    padding-top: 2px;
+    padding-right: 7px;
 }
 ul {
     list-style-type: none;
