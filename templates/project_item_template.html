@@ -25,7 +25,7 @@
         <div class="project_description_short">{{p.service}}</div>
         <div class="project_description_long">{{p.description}}
             {% if p.company_url and p.my_work_url %}
-                <a href="{{p.my_work_url}}" target="_blank">More...</a>
+                <a href="{{p.my_work_url}}" target="_blank" class="project_more_link">More...</a>
             {% endif %}
         </div>
         <div class="project_tags">{{p.skills}}</div>

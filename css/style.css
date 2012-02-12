@@ -110,7 +110,6 @@ li {
     margin-bottom:40px;
 }
 .project a {
-    color: #A878E3;
     color: black;
     font-weight: bold;
     text-decoration: none;
@@ -121,6 +120,16 @@ li {
     font-weight: bold;
     text-decoration: none;
     border-bottom: 1px dotted #A878E3;
+}
+.project_more_link {
+    color: #888888 !important;
+    font-weight: normal !important;
+    text-decoration: none !important;
+    border-bottom: 1px dotted #A878E3 !important;
+}
+.project_more_link:hover {
+    color: #A878E3 !important;
+    border-bottom: 1px dotted #A878E3 !important;
 }
 .project_image {
     padding-top:3px;
