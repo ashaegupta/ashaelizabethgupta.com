@@ -43,7 +43,7 @@ asha.showProject = function(project) {
         all_c[i].style.display = "none";
     }
     // show the div with given id, and highlight the category
-    var p_el = document.getElementById(project);
+    var p_el = document.getElementById(project+"_list");
     if (p_el) {
         p_el.style.display = "inline";
     }
