@@ -45,9 +45,9 @@ def write_project_data():
     print "adding other data..."
     data['projects_page'] = 1
     data[u'product_mantra'] = unicode("I believe the secret to great products is to continually ask 'why?' and then serve that deepest need.")
-    data[u'development_mantra'] = unicode("Everyone should be able to write and understand code at a basic level.")
+    data[u'development_mantra'] = unicode("Nothing like a good commit.")
     data[u'data_mantra'] = unicode("Intuition is fantastic, intuition backed by robust data, even better.")
-    data[u'personal_mantra'] = unicode("Life is what happens when you busy are making other plans. Spend time on things you care about.")
+    data[u'personal_mantra'] = unicode("'You are already naked. There is no reason not to follow your heart.' -- Steve Jobs")
 
     print "saving file..."
     data_str = "data = %s" % dict(data)
