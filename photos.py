@@ -11,17 +11,26 @@ def get_pictures():
 def get_pictures_older_than(created_time):
     return get_latest_pictures(older_than=created_time)
 
-def get_latest_pictures(older_than=None):
+@app.route("/pictures/around/<created_time>")
+def get_pictures_around(created_time):
+    return get_latest_pictures(around=created_time)
+
+def get_latest_pictures(older_than=None, around=None):
     if older_than:
         photos = Photo.get_photos(older_than=older_than)
+    elif around:
+        photos = Photo.get_photos(around=around)
     else:
         photos = Photo.get_photos()
+
+    # deal with a jsonp request
     callback = request.args.get('callback')
     formatted_photos = Photo.format_photos_for_api(photos)
     if callback:
         content = str(callback) + '(' + json.dumps(formatted_photos) + ');'
     else:
         content = json.dumps(formatted_photos)
+
     response = app.make_response(content)
     response.mimetype = 'application/json'
     return response
