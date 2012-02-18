@@ -1,7 +1,6 @@
 <html>
     <head>
         <link rel=stylesheet href="css/style.css" type="text/css"></link>
-        <script type-"text/javascript" src="js/microajax.minified.js"></script>
         <script type-"text/javascript" src="js/ashaelizabethgupta.js"></script>
     </head>
     <body>
@@ -14,10 +13,19 @@
                     pictures
                 </div>
                 <div id="picture_container">
-                    <a id="image_link" target="_blank">
-                        <img id="image" class="picture_img"></img>
-                    </a>
-                    <div id="caption" class="picture_caption"></div>
+                    <div id="picture_prev_help" class="picture_help">left key</div>
+                    <div id="picture_prev_link" class="picture_link">&lsaquo;</div>
+                    <div id="picture">
+                        <a id="picture_link" target="_blank">
+                            <img id="picture_img"></img>
+                        </a>
+                    </div>
+                    <div id="picture_next_link" class="picture_link">&rsaquo;</div>
+                    <div id="picture_next_help" class="picture_help">right key</div>
+                    <div class="clear"></div>
+                    <div id="picture_caption"></div>
+                </div>
+                <div id="picture_cache_warmer">
                 </div>
             </div>
         </div>

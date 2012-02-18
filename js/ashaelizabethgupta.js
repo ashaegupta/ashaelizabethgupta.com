@@ -17,7 +17,7 @@ asha.listen(window, 'load', function() {
         photos.loadPhotos();
     } else {
         asha.loadProject();
-        asha.checkHashChange();
+        asha.checkHashChange(asha.loadFromHash);
     }
     asha.loadDeferredImages();
 });
@@ -61,17 +61,21 @@ asha.getProjectNameFromHash = function () {
     return window.location.hash.substring(1);
 };
 
-asha.checkHashChange = function() {
+asha.loadFromHash = function() {
+    var project = asha.getProjectNameFromHash();
+    if (project) {
+        asha.showProject(project);
+    }
+};
+
+asha.checkHashChange = function(callback) {
     /* loads the appropriate project tab when the url hash changes.
      * This removes tab changing logic from links. Links just change the hash,
      * and this takes care of loading the right data
      */
     if ("onhashchange" in window) { // event supported?
         window.onhashchange = function () {
-            var project = asha.getProjectNameFromHash();
-            if (project) {
-                asha.showProject(project);
-            }
+            callback();
         };
     }
     else { // event not supported:
@@ -79,10 +83,7 @@ asha.checkHashChange = function() {
         window.setInterval(function () {
             if (window.location.hash != storedHash) {
                 storedHash = window.location.hash;
-                var project = asha.getProjectNumberFromHash();
-                if (project) {
-                    asha.showProject(project);
-                }
+                callback();
             }
         }, 100);
     }
@@ -120,54 +121,126 @@ photos.moreCallback = photos.callbackArg + 'photos.getMorePhotos';
 photos.gettingMore = false;
 
 photos.loadPhotos = function() {
+    /* when the page first loads, this gets the latest pictures
+     * from the server and starts listening for keyboard shortcuts
+     */
     var latest_url = 'http://ashaelizabethgupta.com/pictures/latest' + photos.latestCallback;
     photos.loadScript(latest_url);
+    photos.bindEventsToPrevNextLink();
     photos.listenForKeyboardShortcuts();
 };
 
 photos.getAndLoadMorePhotos = function() {
-    // what's the latest id we've got?
+    /* gets another page of images from the server
+     */
     var oldest = photos.photoList[photos.photoList.length - 1].created_time;
     var next = 'http://ashaelizabethgupta.com/pictures/olderthan/' + oldest + photos.moreCallback;
     photos.loadScript(next);
 };
 
 photos.getMorePhotos = function(morePhotos) {
-    console.log('got more');
     photos.photoList.push.apply(photos.photoList, morePhotos); 
     photos.currentPhoto++;
     photos.showCurrentPhoto();
     photos.gettingMore = false;
+    photos.warmCache(morePhotos);
 };
 
 photos.getLatestPhotos = function(photoList) {
-    console.log('got latest');
     photos.photoList = photoList;
     photos.currentPhoto = 0;
     photos.showCurrentPhoto();
+    photos.warmCache(photoList);
+};
+
+photos.warmCache = function(photoList) {
+    /* loads all the images in the list of photos in 
+     * hidden divs, so they are ready in the cache when we 
+     * want to display them
+     */
+    for (var i=0; i<photoList.length; i++) {
+        var cw = document.createElement('img');
+        var src = photoList[i].images.standard_resolution.url;
+        cw.setAttribute('src', src);
+        var cacheWarmingHiddenDiv = document.getElementById('picture_cache_warmer');
+        cacheWarmingHiddenDiv.appendChild(cw)
+    }
 };
 
 photos.showCurrentPhoto = function() {
+    /* swaps the currently displayed image with the 
+     * image that's in the currentPhoto index in image list
+     */
+    // image
     var cp = photos.photoList[photos.currentPhoto];
-    var img = document.getElementById('image')
+    var img = document.getElementById('picture_img')
     var src = cp.images.standard_resolution.url;
     img.setAttribute('src', src);
 
-    var caption = document.getElementById('caption')
+    // caption
+    var caption = document.getElementById('picture_caption')
     var text = '';
     if (cp.caption && cp.caption.text) {
         text = cp.caption.text;
-    } else {
-        text = '';
     }
     caption.innerHTML = text;
 
-    var link = document.getElementById('image_link');
+    // link that the image points to
+    var link = document.getElementById('picture_link');
     link.href = cp.link;
+
+    // url hash
+    window.location.hash = cp.created_time;
+
+
+    var prev_help = document.getElementById('picture_prev_help');
+    var next_help = document.getElementById('picture_next_help');
+    var prev_link = document.getElementById('picture_prev_link');
+    if (photos.currentPhoto == 0) {
+        prev_help.style.color = '#aaa';
+        prev_link.style.color = '#aaa';
+        next_help.style.color = 'black';
+    } else {
+        prev_help.style.color = 'white';
+        prev_link.style.color = 'black';
+        next_help.style.color = 'white';
+    }
+};
+
+photos.showNextPhoto = function() {
+    if (photos.currentPhoto < photos.photoList.length - 1) {
+        photos.currentPhoto++;
+        photos.showCurrentPhoto();
+    } else if (photos.currentPhoto == photos.photoList.length - 1) {
+        if (!photos.gettingMore) {
+            photos.gettingMore = true;
+            photos.getAndLoadMorePhotos();
+        }
+    }
+};
+
+photos.showPreviousPhoto = function() {
+    if (photos.currentPhoto > 0) {
+        photos.currentPhoto--;
+        photos.showCurrentPhoto();
+    }
+};
+
+photos.bindEventsToPrevNextLink = function() {
+    var prev_link = document.getElementById('picture_prev_link');
+    asha.listen(prev_link, 'click', function() {
+        photos.showPreviousPhoto();
+    });
+
+    var next_link = document.getElementById('picture_next_link');
+    asha.listen(next_link, 'click', function() {
+        photos.showNextPhoto();
+    });
 };
 
 photos.loadScript = function(_src) {
-    console.log('fetching '+ _src);
+    /* makes a jsonp request for _src
+     */
     var e = document.createElement('script');
     e.setAttribute('language','javascript'); 
     e.setAttribute('type', 'text/javascript');
@@ -203,23 +276,4 @@ photos.listenForKeyboardShortcuts = function() {
             }
         }
     });
-};
-
-photos.showNextPhoto = function() {
-    if (photos.currentPhoto < photos.photoList.length - 1) {
-        photos.currentPhoto++;
-        photos.showCurrentPhoto();
-    } else if (photos.currentPhoto == photos.photoList.length - 1) {
-        if (!photos.gettingMore) {
-            photos.gettingMore = true;
-            photos.getAndLoadMorePhotos();
-        }
-    }
-};
-
-photos.showPreviousPhoto = function() {
-    if (photos.currentPhoto > 0) {
-        photos.currentPhoto--;
-        photos.showCurrentPhoto();
-    }
 };
