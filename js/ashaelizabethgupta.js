@@ -25,7 +25,7 @@ asha.listen(window, 'load', function() {
 asha.loadProject = function() {
     /* shows the appropriate tab when the page first loads.
      */
-    var project = asha.getProjectNameFromHash();
+    var project = asha.getHash();
     if (project) {
         asha.showProject(project);
     } else {
@@ -57,12 +57,12 @@ asha.showProject = function(project) {
     }
 };
 
-asha.getProjectNameFromHash = function () {
+asha.getHash = function () {
     return window.location.hash.substring(1);
 };
 
 asha.loadFromHash = function() {
-    var project = asha.getProjectNameFromHash();
+    var project = asha.getHash();
     if (project) {
         asha.showProject(project);
     }
@@ -115,35 +115,75 @@ asha.loadDeferredImages = function() {
 var photos = photos || {};
 photos.currentPhoto = 0;
 photos.photoList = null;
+photos.baseUrl = 'http://ashaelizabethgupta.com/pictures/';
 photos.callbackArg = '?callback=';
 photos.latestCallback = photos.callbackArg + 'photos.getLatestPhotos';
-photos.moreCallback = photos.callbackArg + 'photos.getMorePhotos';
+photos.olderCallback = photos.callbackArg + 'photos.getOlderPhotos';
+photos.newerCallback = photos.callbackArg + 'photos.getNewerPhotos';
+photos.aroundCallback = photos.callbackArg + 'photos.getPhotosAround';
 photos.gettingMore = false;
+photos.changedOnce = false;
 
 photos.loadPhotos = function() {
     /* when the page first loads, this gets the latest pictures
      * from the server and starts listening for keyboard shortcuts
      */
-    var latest_url = 'http://ashaelizabethgupta.com/pictures/latest' + photos.latestCallback;
-    photos.loadScript(latest_url);
+    var photoToLoad = asha.getHash();
+    if (photoToLoad) {
+        var url = photos.baseUrl + 'around/' + photoToLoad + photos.aroundCallback;
+    } else {
+        var url = photos.baseUrl + 'latest' + photos.latestCallback;
+    }
+    photos.loadScript(url);
     photos.bindEventsToPrevNextLink();
     photos.listenForKeyboardShortcuts();
 };
 
-photos.getAndLoadMorePhotos = function() {
+photos.getAndLoadMorePhotos = function(older, newer) {
     /* gets another page of images from the server
      */
-    var oldest = photos.photoList[photos.photoList.length - 1].created_time;
-    var next = 'http://ashaelizabethgupta.com/pictures/olderthan/' + oldest + photos.moreCallback;
+    if (older) {
+        var oldest = photos.photoList[photos.photoList.length - 1].created_time;
+        var next = 'http://ashaelizabethgupta.com/pictures/olderthan/' + oldest + photos.olderCallback;
+    } else if (newer) {
+        var newest = photos.photoList[0].created_time;
+        var next = 'http://ashaelizabethgupta.com/pictures/newerthan/' + newest + photos.newerCallback;
+    }
     photos.loadScript(next);
 };
 
-photos.getMorePhotos = function(morePhotos) {
-    photos.photoList.push.apply(photos.photoList, morePhotos); 
+photos.getOlderPhotos = function(olderPhotos) {
+    photos.photoList.push.apply(photos.photoList, olderPhotos); 
     photos.currentPhoto++;
     photos.showCurrentPhoto();
     photos.gettingMore = false;
-    photos.warmCache(morePhotos);
+    photos.warmCache(olderPhotos);
+};
+
+photos.getNewerPhotos = function(newerPhotos) {
+    photos.currentPhoto = newerPhotos.length;
+    newerPhotos.push.apply(newerPhotos, photos.photoList); 
+    photos.photoList = newerPhotos.slice(0);
+    if (photos.currentPhoto > 0) {
+        photos.currentPhoto--;
+        photos.showCurrentPhoto();
+        photos.warmCache(newerPhotos);
+    }
+    photos.gettingMore = false;
+};
+
+photos.getPhotosAround = function(photoList) {
+    var desiredPhoto = asha.getHash();
+    photos.photoList = photoList;
+    photos.currentPhoto = 0;
+    for (var i=0; i<photos.photoList.length; i++) {
+        if (photos.photoList[i].created_time == desiredPhoto) {
+            photos.currentPhoto = i;
+            break;
+        }
+    }
+    photos.showCurrentPhoto();
+    photos.warmCache(photoList);
 };
 
 photos.getLatestPhotos = function(photoList) {
@@ -192,18 +232,20 @@ photos.showCurrentPhoto = function() {
     // url hash
     window.location.hash = cp.created_time;
 
+    photos.hideHelpText();
+};
 
+photos.hideHelpText = function() {
+    // hide the prev and next help text if the picture changes
     var prev_help = document.getElementById('picture_prev_help');
     var next_help = document.getElementById('picture_next_help');
     var prev_link = document.getElementById('picture_prev_link');
-    if (photos.currentPhoto == 0) {
-        prev_help.style.color = '#aaa';
-        prev_link.style.color = '#aaa';
-        next_help.style.color = 'black';
-    } else {
+    if (photos.changedOnce) {
         prev_help.style.color = 'white';
         prev_link.style.color = 'black';
         next_help.style.color = 'white';
+    } else {
+        photos.changedOnce = true;
     }
 };
 
@@ -214,7 +256,7 @@ photos.showNextPhoto = function() {
     } else if (photos.currentPhoto == photos.photoList.length - 1) {
         if (!photos.gettingMore) {
             photos.gettingMore = true;
-            photos.getAndLoadMorePhotos();
+            photos.getAndLoadMorePhotos(true, false);
         }
     }
 };
@@ -223,6 +265,11 @@ photos.showPreviousPhoto = function() {
     if (photos.currentPhoto > 0) {
         photos.currentPhoto--;
         photos.showCurrentPhoto();
+    } else if (photos.currentPhoto == 0) {
+        if (!photos.gettingMore) {
+            photos.gettingMore = true;
+            photos.getAndLoadMorePhotos(false, true);
+        }
     }
 };
 
