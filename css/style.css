@@ -179,5 +179,6 @@ li {
     width: 500px;
 }
 
-.picture_caption {
+#picture_cache_warmer {
+    display: none;
 }
