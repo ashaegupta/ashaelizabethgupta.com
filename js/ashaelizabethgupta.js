@@ -13,9 +13,13 @@ asha.listen = function(el, evnt, func) {
 };
 
 asha.listen(window, 'load', function() {
-    asha.loadProject();
-    asha.checkHashChange();
-    asha.loadDeferredImages();
+    if (window.location.pathname.indexOf('pictures') != -1) {
+        photos.getLatestPhotos();
+    } else {
+        asha.loadProject();
+        asha.checkHashChange();
+        asha.loadDeferredImages();
+    }
 });
 
 asha.loadProject = function() {
@@ -103,4 +107,14 @@ asha.loadDeferredImages = function() {
             el.setAttribute('deferred_pic_loaded', 'true');
         }
     }
+};
+
+// ********* photos *********
+// code for the photos slideshow
+var photos = photos || {};
+
+photos.getLatestPhotos = function() {
+    microAjax("http://ashaelizabethgupta.com/pictures/latest", function(resp) {
+        console.log(resp);
+    });
 };
