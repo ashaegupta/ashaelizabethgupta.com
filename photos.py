@@ -27,4 +27,4 @@ def get_latest_pictures(older_than=None):
     return response
 
 if __name__ == '__main__':
-    app.run(debug=True)
+    app.run(port=5002)
