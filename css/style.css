@@ -67,13 +67,12 @@ li {
 /*
  * homepage
  */
- .title_border {
-     margin-top: 17px;
-     border
-     font-size:13px;
+.homepage_heading_border {
+     padding-bottom: 30px;
+     border-bottom: 3px solid black;
  }
 .main_homepage_text {
-    margin-top: 70px;
+    margin-top: 50px;
     width: 600px;
     font-size:14px;
 }
@@ -87,6 +86,14 @@ li {
 .image {
     width: 450;
     margin-top: 20;
+}
+
+.ribbon{
+    margin-top:50px;
+}
+
+.ribbon_image{
+    border-radius:0px;
 }
 
 /*
