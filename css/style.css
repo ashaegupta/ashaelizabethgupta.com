@@ -1,8 +1,9 @@
 body {
     /* default text settings */
     font-family: "Helvetica Neue", Arial, Helvetica, sans-serif;
-    font-size:12.5;
+    font-size:13;
     color: #393E45;
+    background:url(xv.png);
 }
 a {
     text-decoration: none;
@@ -67,6 +68,11 @@ li {
 /*
  * homepage
  */
+ .title_border {
+     margin-top: 17px;
+     border
+     font-size:13px;
+ }
 .main_homepage_text {
     margin-top: 70px;
     width: 600px;
