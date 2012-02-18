@@ -67,9 +67,15 @@ li {
 /*
  * homepage
  */
+ .title_border {
+     margin-top: 17px;
+     border
+     font-size:13px;
+ }
 .main_homepage_text {
     margin-top: 70px;
     width: 600px;
+    font-size:13px;
 }
 .main_homepage_text a {
     color: #A878E3;
