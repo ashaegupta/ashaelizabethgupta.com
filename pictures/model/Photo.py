@@ -1,5 +1,8 @@
 from collections import defaultdict
-from pictures.model.MongoMixIn import MongoMixIn
+try:
+    from pictures.model.MongoMixIn import MongoMixIn
+except:
+    from model.MongoMixIn import MongoMixIn
 from pymongo import DESCENDING
 
 class Photo(MongoMixIn):

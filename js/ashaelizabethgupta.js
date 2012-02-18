@@ -120,7 +120,7 @@ photos.moreCallback = photos.callbackArg + 'photos.getMorePhotos';
 photos.gettingMore = false;
 
 photos.loadPhotos = function() {
-    var latest_url = 'http://127.0.0.1:5000/pictures/latest' + photos.latestCallback;
+    var latest_url = 'http://ashaelizabethgupta.com/pictures/latest' + photos.latestCallback;
     photos.loadScript(latest_url);
     photos.listenForKeyboardShortcuts();
 };
@@ -128,7 +128,7 @@ photos.loadPhotos = function() {
 photos.getAndLoadMorePhotos = function() {
     // what's the latest id we've got?
     var oldest = photos.photoList[photos.photoList.length - 1].created_time;
-    var next = 'http://127.0.0.1:5000/pictures/olderthan/' + oldest + photos.moreCallback;
+    var next = 'http://ashaelizabethgupta.com/pictures/olderthan/' + oldest + photos.moreCallback;
     photos.loadScript(next);
 };
 
