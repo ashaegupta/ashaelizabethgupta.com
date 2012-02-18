@@ -11,6 +11,7 @@ class Photo(MongoMixIn):
 
     A_ID                = 'id'
     A_CREATED_TIME      = 'created_time'
+    A_IGNORE            = 'ignore'
 
     @classmethod
     def setup_mongo_indexes(klass):
@@ -22,16 +23,14 @@ class Photo(MongoMixIn):
         return klass.mdbc().find_one({klass.A_ID: id})
 
     @classmethod
+    def find_by_created_time(klass, t):
+        return klass.mdbc().find_one({klass.A_CREATED_TIME: t})
+
+    @classmethod
     def get_photos(klass, around=None, older_than=None, newer_than=None, limit=20, return_list=True):
+        ignore_query = {klass.A_IGNORE: {"$ne":1}}
         if around:
-            above = klass.mdbc().find({klass.A_CREATED_TIME:{"$gte":around}}).sort(klass.A_CREATED_TIME).limit(limit/2)
-            result = [a for a in above]
-            print len(result), above.count()
-            below = klass.mdbc().find({klass.A_CREATED_TIME:{"$lt":around}}).limit(limit/2)
-            result += [b for b in below]
-            print len(result), below.count()
-            result.sort(key = lambda x: x.get(klass.A_CREATED_TIME), reverse=True)
-            return result
+            return klass.get_photos_around(around, limit)
 
         query = defaultdict(dict)
         if older_than and newer_than and older_than > newer_than:
@@ -40,8 +39,25 @@ class Photo(MongoMixIn):
             query[klass.A_CREATED_TIME].update({"$lt":older_than})
         if newer_than:
             query[klass.A_CREATED_TIME].update({"$gt":newer_than})
+        query.update(ignore_query)
         cursor = klass.mdbc().find(query).sort(klass.A_CREATED_TIME, DESCENDING).limit(limit)
         return [l for l in cursor]
+
+    @classmethod
+    def get_photos_around(klass, around, limit):
+        ignore_query = {klass.A_IGNORE: {"$ne":1}}
+        above_query = {klass.A_CREATED_TIME:{"$gte":around}}
+        above_query.update(ignore_query)
+        above = klass.mdbc().find(above_query).sort(klass.A_CREATED_TIME).limit(limit/2)
+        result = [a for a in above]
+
+        below_query = {klass.A_CREATED_TIME:{"$lt":around}}
+        below_query.update(ignore_query)
+        below = klass.mdbc().find(below_query).limit(limit/2)
+        result += [b for b in below]
+
+        result.sort(key = lambda x: x.get(klass.A_CREATED_TIME), reverse=True)
+        return result
 
     @classmethod
     def format_photos_for_api(klass, photos):
