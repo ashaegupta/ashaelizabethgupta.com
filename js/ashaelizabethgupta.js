@@ -17,7 +17,7 @@ asha.listen(window, 'load', function() {
         photos.loadPhotos();
     } else {
         asha.loadProject();
-        asha.checkHashChange();
+        asha.checkHashChange(asha.loadFromHash);
     }
     asha.loadDeferredImages();
 });
@@ -61,17 +61,21 @@ asha.getProjectNameFromHash = function () {
     return window.location.hash.substring(1);
 };
 
-asha.checkHashChange = function() {
+asha.loadFromHash = function() {
+    var project = asha.getProjectNameFromHash();
+    if (project) {
+        asha.showProject(project);
+    }
+};
+
+asha.checkHashChange = function(callback) {
     /* loads the appropriate project tab when the url hash changes.
      * This removes tab changing logic from links. Links just change the hash,
      * and this takes care of loading the right data
      */
     if ("onhashchange" in window) { // event supported?
         window.onhashchange = function () {
-            var project = asha.getProjectNameFromHash();
-            if (project) {
-                asha.showProject(project);
-            }
+            callback();
         };
     }
     else { // event not supported:
@@ -79,10 +83,7 @@ asha.checkHashChange = function() {
         window.setInterval(function () {
             if (window.location.hash != storedHash) {
                 storedHash = window.location.hash;
-                var project = asha.getProjectNumberFromHash();
-                if (project) {
-                    asha.showProject(project);
-                }
+                callback();
             }
         }, 100);
     }
@@ -125,6 +126,7 @@ photos.loadPhotos = function() {
      */
     var latest_url = 'http://ashaelizabethgupta.com/pictures/latest' + photos.latestCallback;
     photos.loadScript(latest_url);
+    photos.bindEventsToPrevNextLink();
     photos.listenForKeyboardShortcuts();
 };
 
@@ -171,23 +173,38 @@ photos.showCurrentPhoto = function() {
      */
     // image
     var cp = photos.photoList[photos.currentPhoto];
-    var img = document.getElementById('image')
+    var img = document.getElementById('picture_img')
     var src = cp.images.standard_resolution.url;
     img.setAttribute('src', src);
 
     // caption
-    var caption = document.getElementById('caption')
+    var caption = document.getElementById('picture_caption')
     var text = '';
     if (cp.caption && cp.caption.text) {
         text = cp.caption.text;
-    } else {
-        text = '';
     }
     caption.innerHTML = text;
 
     // link that the image points to
-    var link = document.getElementById('image_link');
+    var link = document.getElementById('picture_link');
     link.href = cp.link;
+
+    // url hash
+    window.location.hash = cp.created_time;
+
+
+    var prev_help = document.getElementById('picture_prev_help');
+    var next_help = document.getElementById('picture_next_help');
+    var prev_link = document.getElementById('picture_prev_link');
+    if (photos.currentPhoto == 0) {
+        prev_help.style.color = '#aaa';
+        prev_link.style.color = '#aaa';
+        next_help.style.color = 'black';
+    } else {
+        prev_help.style.color = 'white';
+        prev_link.style.color = 'black';
+        next_help.style.color = 'white';
+    }
 };
 
 photos.showNextPhoto = function() {
@@ -207,6 +224,18 @@ photos.showPreviousPhoto = function() {
         photos.currentPhoto--;
         photos.showCurrentPhoto();
     }
+};
+
+photos.bindEventsToPrevNextLink = function() {
+    var prev_link = document.getElementById('picture_prev_link');
+    asha.listen(prev_link, 'click', function() {
+        photos.showPreviousPhoto();
+    });
+
+    var next_link = document.getElementById('picture_next_link');
+    asha.listen(next_link, 'click', function() {
+        photos.showNextPhoto();
+    });
 };
 
 photos.loadScript = function(_src) {
