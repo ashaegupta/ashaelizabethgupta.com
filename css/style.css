@@ -73,7 +73,7 @@ li {
      font-size:13px;
  }
 .main_homepage_text {
-    margin-top: 70px;
+    margin-top: 50px;
     width: 600px;
     font-size:14px;
 }
@@ -87,6 +87,14 @@ li {
 .image {
     width: 450;
     margin-top: 20;
+}
+
+.ribbon{
+    margin-top:50px;
+}
+
+.ribbon_image{
+    border-radius:0px;
 }
 
 /*
