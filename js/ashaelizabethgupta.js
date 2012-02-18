@@ -13,8 +13,12 @@ asha.listen = function(el, evnt, func) {
 };
 
 asha.listen(window, 'load', function() {
-    asha.loadProject();
-    asha.checkHashChange();
+    if (window.location.pathname.indexOf('pictures') != -1) {
+        photos.loadPhotos();
+    } else {
+        asha.loadProject();
+        asha.checkHashChange();
+    }
     asha.loadDeferredImages();
 });
 
@@ -102,5 +106,120 @@ asha.loadDeferredImages = function() {
             el.setAttribute('src', src);
             el.setAttribute('deferred_pic_loaded', 'true');
         }
+    }
+};
+
+// ********* photos *********
+// code for the photos slideshow
+var photos = photos || {};
+photos.currentPhoto = 0;
+photos.photoList = null;
+photos.callbackArg = '?callback=';
+photos.latestCallback = photos.callbackArg + 'photos.getLatestPhotos';
+photos.moreCallback = photos.callbackArg + 'photos.getMorePhotos';
+photos.gettingMore = false;
+
+photos.loadPhotos = function() {
+    var latest_url = 'http://127.0.0.1:5000/pictures/latest' + photos.latestCallback;
+    photos.loadScript(latest_url);
+    photos.listenForKeyboardShortcuts();
+};
+
+photos.getAndLoadMorePhotos = function() {
+    // what's the latest id we've got?
+    var oldest = photos.photoList[photos.photoList.length - 1].created_time;
+    var next = 'http://127.0.0.1:5000/pictures/olderthan/' + oldest + photos.moreCallback;
+    photos.loadScript(next);
+};
+
+photos.getMorePhotos = function(morePhotos) {
+    console.log('got more');
+    photos.photoList.push.apply(photos.photoList, morePhotos); 
+    photos.currentPhoto++;
+    photos.showCurrentPhoto();
+    photos.gettingMore = false;
+};
+
+photos.getLatestPhotos = function(photoList) {
+    console.log('got latest');
+    photos.photoList = photoList;
+    photos.currentPhoto = 0;
+    photos.showCurrentPhoto();
+};
+
+photos.showCurrentPhoto = function() {
+    var cp = photos.photoList[photos.currentPhoto];
+    var img = document.getElementById('image')
+    var src = cp.images.standard_resolution.url;
+    img.setAttribute('src', src);
+
+    var caption = document.getElementById('caption')
+    var text = '';
+    if (cp.caption && cp.caption.text) {
+        text = cp.caption.text;
+    } else {
+        text = '';
+    }
+    caption.innerHTML = text;
+
+    var link = document.getElementById('image_link');
+    link.href = cp.link;
+};
+
+photos.loadScript = function(_src) {
+    console.log('fetching '+ _src);
+    var e = document.createElement('script');
+    e.setAttribute('language','javascript'); 
+    e.setAttribute('type', 'text/javascript');
+    e.setAttribute('src',_src); 
+    var parent = document.head || document.body;
+    parent.appendChild(e); 
+};
+
+photos.listenForKeyboardShortcuts = function() {
+    document.addEventListener('keydown', function(e) {
+        // we're trying to identify the element for which this event was fired, 
+        // and then decide whether or not to set off the shortcut
+        // see: http://www.quirksmode.org/js/events_properties.html
+        var element;
+        if (e.target) element = e.target;
+        else if (e.srcElement) element = e.srcElement;
+        if (element.nodeType==3) element = element.parentNode;
+
+        // don't want to set the shortcut off when you're editing text on the page
+        if (element.tagName == 'INPUT' || element.tagName == 'TEXTAREA') return;
+
+        if (e.keyCode) {
+            // want to prevent these from running if the crtl, alt, shift 
+            // or command keys are pressed
+            if (e.ctrlKey || e.altKey || e.shiftKey || e.metaKey) return;
+
+            if (e.keyCode == 74 || e.keyCode == 39 || e.keyCode == 40) {
+                // j, right, down
+                photos.showNextPhoto();
+            } else if (e.keyCode == 75 || e.keyCode == 37 || e.keyCode == 38) {
+                // k, left, up
+                photos.showPreviousPhoto();
+            }
+        }
+    });
+};
+
+photos.showNextPhoto = function() {
+    if (photos.currentPhoto < photos.photoList.length - 1) {
+        photos.currentPhoto++;
+        photos.showCurrentPhoto();
+    } else if (photos.currentPhoto == photos.photoList.length - 1) {
+        if (!photos.gettingMore) {
+            photos.gettingMore = true;
+            photos.getAndLoadMorePhotos();
+        }
+    }
+};
+
+photos.showPreviousPhoto = function() {
+    if (photos.currentPhoto > 0) {
+        photos.currentPhoto--;
+        photos.showCurrentPhoto();
     }
 };

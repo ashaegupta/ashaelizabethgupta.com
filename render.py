@@ -4,24 +4,21 @@ import codecs
 from jinja2 import Environment, FileSystemLoader
 from project_data import project_data # json data for projects
 
-templates_location = 'templates'
-projects_template = 'projects_template.html'
-projects_output = 'projects.html'
-index_template = 'index_template.html'
-index_output = 'index.html'
+templates_dir = 'templates'
 
-env = Environment(loader = FileSystemLoader(templates_location))
+templates_to_render = {
+    'index':{'index_page':1},
+    'projects':project_data.data,
+    'pictures':{'pictures_page':1}
+}
 
-# render project page
-template = env.get_template(projects_template)
-project_html = template.render(project_data.data)
-project_file = codecs.open(projects_output, encoding='utf-8', mode='w')
-project_file.write(project_html)
-project_file.close()
+env = Environment(loader = FileSystemLoader(templates_dir))
 
-# render homepage
-template = env.get_template(index_template)
-index_html = template.render(index_page=1)
-index_file = codecs.open(index_output, encoding='utf-8', mode='w')
-index_file.write(index_html)
-index_file.close()
+for template_root in templates_to_render:
+    template_name = "%s_template.html" % template_root
+    template = env.get_template(template_name)
+    html = template.render(templates_to_render[template_root])
+    file_name = "%s.html" % template_root
+    f = codecs.open(file_name, encoding='utf-8', mode='w')
+    f.write(html)
+    f.close()
