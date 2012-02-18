@@ -52,7 +52,8 @@ class Photo(MongoMixIn):
             'filter':1,
             'id':1,
             'images':{'standard_resolution':{'url':1}},
-            'link':1
+            'link':1,
+            'likes':{'count':1}
         }
         for p in photos:
             f_photos = klass._get_keys_from_hash(keys_for_api, p)

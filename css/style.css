@@ -165,3 +165,19 @@ li {
 .project_tags {
    margin-top: 10px; 
 }
+
+/*
+ * pictures
+ */
+
+#picture_container {
+    width: 500px;
+    padding-top: 20px;
+}
+
+.picture_img {
+    width: 500px;
+}
+
+.picture_caption {
+}
