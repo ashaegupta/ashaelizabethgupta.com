@@ -11,13 +11,19 @@ def get_pictures():
 def get_pictures_older_than(created_time):
     return get_latest_pictures(older_than=created_time)
 
+@app.route("/pictures/newerthan/<created_time>")
+def get_pictures_newer_than(created_time):
+    return get_latest_pictures(newer_than=created_time)
+
 @app.route("/pictures/around/<created_time>")
 def get_pictures_around(created_time):
     return get_latest_pictures(around=created_time)
 
-def get_latest_pictures(older_than=None, around=None):
+def get_latest_pictures(older_than=None, newer_than=None, around=None):
     if older_than:
         photos = Photo.get_photos(older_than=older_than)
+    elif newer_than:
+        photos = Photo.get_photos(newer_than=newer_than)
     elif around:
         photos = Photo.get_photos(around=around)
     else:
