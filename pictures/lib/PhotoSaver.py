@@ -1,4 +1,4 @@
-import local_settings
+from pictures import local_settings
 from pictures.model.Photo import Photo
 from instagram import client
 
@@ -13,7 +13,7 @@ class PhotoSaver():
                 klass.get_new_photos(user_id, min_timestamp)
 
     @classmethod
-    def get_new_photos(klass, user_id, min_timestamp):
+    def get_new_photos(klass, user_id, min_timestamp, print_responses=False):
         access_token = local_settings.access_tokens.get(user_id)
         api = client.InstagramAPI(access_token=access_token)
         pages = api.user_recent_media(as_generator=True,
@@ -23,6 +23,8 @@ class PhotoSaver():
         while True:
             try:
                 page = pages.next()
+                if print_responses:
+                    print page
             except StopIteration:
                 break
             except Exception, e:
