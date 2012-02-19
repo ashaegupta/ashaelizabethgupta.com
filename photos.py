@@ -12,7 +12,11 @@ def instagram_sub():
         #verify_token = request.args.get('hub.verify_token')
         return challenge
     elif request.method == 'POST':
-        try: print request.__dict__
+        try: 
+            print request.__dict__
+            print '\n\n'
+            print str(request.data)
+            
         except: pass
 
 
