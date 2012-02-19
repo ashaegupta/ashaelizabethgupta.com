@@ -14,7 +14,7 @@ def instagram_sub():
         #verify_token = request.args.get('hub.verify_token')
         return challenge
     elif request.method == 'POST':
-        process_instagram_post(simplejson.loads(request.data))
+        process_instagram_post(request.data)
 
 def process_instagram_post(rdata):
     try:
