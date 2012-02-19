@@ -153,6 +153,9 @@ photos.getAndLoadMorePhotos = function(older, newer) {
 };
 
 photos.getOlderPhotos = function(olderPhotos) {
+    /* jsonp callback to display photos received from the server
+     * that are older than the current one 
+     * the jsonp callback methods ...*/
     photos.photoList.push.apply(photos.photoList, olderPhotos); 
     photos.currentPhoto++;
     photos.showCurrentPhoto();
@@ -161,6 +164,8 @@ photos.getOlderPhotos = function(olderPhotos) {
 };
 
 photos.getNewerPhotos = function(newerPhotos) {
+    /* jsonp callback to display photos received from the server
+     * that are newer than the current one */
     photos.currentPhoto = newerPhotos.length;
     newerPhotos.push.apply(newerPhotos, photos.photoList); 
     photos.photoList = newerPhotos.slice(0);
@@ -173,6 +178,8 @@ photos.getNewerPhotos = function(newerPhotos) {
 };
 
 photos.getPhotosAround = function(photoList) {
+    /* jsonp callback to display the photo in the hash
+     * and prepare photos before and after it */
     var desiredPhoto = asha.getHash();
     photos.photoList = photoList;
     photos.currentPhoto = 0;
@@ -187,6 +194,8 @@ photos.getPhotosAround = function(photoList) {
 };
 
 photos.getLatestPhotos = function(photoList) {
+    /* jsonp callback to process and display the 
+     * latest pictures available */
     photos.photoList = photoList;
     photos.currentPhoto = 0;
     photos.showCurrentPhoto();
@@ -196,8 +205,7 @@ photos.getLatestPhotos = function(photoList) {
 photos.warmCache = function(photoList) {
     /* loads all the images in the list of photos in 
      * hidden divs, so they are ready in the cache when we 
-     * want to display them
-     */
+     * want to display them */
     for (var i=0; i<photoList.length; i++) {
         var cw = document.createElement('img');
         var src = photoList[i].images.standard_resolution.url;
@@ -209,8 +217,7 @@ photos.warmCache = function(photoList) {
 
 photos.showCurrentPhoto = function() {
     /* swaps the currently displayed image with the 
-     * image that's in the currentPhoto index in image list
-     */
+     * image that's in the currentPhoto index in image list */
     // image
     var cp = photos.photoList[photos.currentPhoto];
     var img = document.getElementById('picture_img')
@@ -236,7 +243,7 @@ photos.showCurrentPhoto = function() {
 };
 
 photos.hideHelpText = function() {
-    // hide the prev and next help text if the picture changes
+    /* hide the prev and next help text if the user moves to a new picture */
     var prev_help = document.getElementById('picture_prev_help');
     var next_help = document.getElementById('picture_next_help');
     var prev_link = document.getElementById('picture_prev_link');
@@ -250,6 +257,8 @@ photos.hideHelpText = function() {
 };
 
 photos.showNextPhoto = function() {
+    /* show the next photo in the stored list of photos.
+     * if required, download some more from the server */
     if (photos.currentPhoto < photos.photoList.length - 1) {
         photos.currentPhoto++;
         photos.showCurrentPhoto();
@@ -262,6 +271,8 @@ photos.showNextPhoto = function() {
 };
 
 photos.showPreviousPhoto = function() {
+    /* show the previous photo in the stored list of photos
+     * if required, download some more from the server */
     if (photos.currentPhoto > 0) {
         photos.currentPhoto--;
         photos.showCurrentPhoto();
@@ -274,6 +285,7 @@ photos.showPreviousPhoto = function() {
 };
 
 photos.bindEventsToPrevNextLink = function() {
+    /* make the next and prev photo buttons clickable */
     var prev_link = document.getElementById('picture_prev_link');
     asha.listen(prev_link, 'click', function() {
         photos.showPreviousPhoto();
@@ -286,8 +298,7 @@ photos.bindEventsToPrevNextLink = function() {
 };
 
 photos.loadScript = function(_src) {
-    /* makes a jsonp request for _src
-     */
+    /* makes a jsonp request for _src */
     var e = document.createElement('script');
     e.setAttribute('language','javascript'); 
     e.setAttribute('type', 'text/javascript');
@@ -323,4 +334,30 @@ photos.listenForKeyboardShortcuts = function() {
             }
         }
     });
+};
+
+/* cookies */
+asha.createCookie = function(name,value,days) {
+    if (days) {
+        var date = new Date();
+        date.setTime(date.getTime()+(days*24*60*60*1000));
+        var expires = "; expires="+date.toGMTString();
+    }
+    else var expires = "";
+    document.cookie = name+"="+value+expires+"; path=/";
+};
+
+asha.readCookie = function(name) {
+    var nameEQ = name + "=";
+    var ca = document.cookie.split(';');
+    for(var i=0;i < ca.length;i++) {
+        var c = ca[i];
+        while (c.charAt(0)==' ') c = c.substring(1,c.length);
+        if (c.indexOf(nameEQ) == 0) return c.substring(nameEQ.length,c.length);
+    }
+    return null;
+};
+
+asha.eraseCookie = function(name) {
+    createCookie(name,"",-1);
 };
