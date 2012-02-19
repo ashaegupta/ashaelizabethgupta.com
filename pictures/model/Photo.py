@@ -3,7 +3,7 @@ try:
     from pictures.model.MongoMixIn import MongoMixIn
 except:
     from model.MongoMixIn import MongoMixIn
-from pymongo import DESCENDING
+from pymongo import DESCENDING, ASCENDING
 
 class Photo(MongoMixIn):
     MONGO_DB_NAME = 'photos'
@@ -29,6 +29,7 @@ class Photo(MongoMixIn):
     @classmethod
     def get_photos(klass, around=None, older_than=None, newer_than=None, limit=20, return_list=True):
         ignore_query = {klass.A_IGNORE: {"$ne":1}}
+        sort_dir = DESCENDING
         if around:
             return klass.get_photos_around(around, limit)
 
@@ -39,9 +40,12 @@ class Photo(MongoMixIn):
             query[klass.A_CREATED_TIME].update({"$lt":older_than})
         if newer_than:
             query[klass.A_CREATED_TIME].update({"$gt":newer_than})
+            sort_dir = ASCENDING
         query.update(ignore_query)
-        cursor = klass.mdbc().find(query).sort(klass.A_CREATED_TIME, DESCENDING).limit(limit)
-        return [l for l in cursor]
+        cursor = klass.mdbc().find(query).sort(klass.A_CREATED_TIME, sort_dir).limit(limit)
+        response = [l for l in cursor]
+        response.sort(key = lambda x: x.get(klass.A_CREATED_TIME), reverse=True)
+        return response
 
     @classmethod
     def get_photos_around(klass, around, limit):
