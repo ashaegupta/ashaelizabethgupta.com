@@ -4,12 +4,16 @@ from pictures.model.Photo import Photo
 app = Flask(__name__)
 
 ### routes for Instagram's real time POSTs
-@app.route("/pictures/instagram/sub")
+@app.route("/pictures/instagram/sub", methods=['GET', 'POST'])
 def instagram_sub():
-    #mode = request.args.get('hub.mode')
-    challenge = request.args.get('hub.challenge')
-    #verify_token = request.args.get('hub.verify_token')
-    return challenge
+    if request.method == 'GET':
+        #mode = request.args.get('hub.mode')
+        challenge = request.args.get('hub.challenge')
+        #verify_token = request.args.get('hub.verify_token')
+        return challenge
+    elif request.method == 'POST':
+        try: print request.__dict__
+        except: pass
 
 
 ### routes for the client to GET pictures json
