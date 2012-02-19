@@ -3,6 +3,16 @@ from pictures.model.Photo import Photo
 
 app = Flask(__name__)
 
+### routes for Instagram's real time POSTs
+@app.route("/pictures/instagram/sub")
+def instagram_sub():
+    #mode = request.args.get('hub.mode')
+    challenge = request.args.get('hub.challenge')
+    #verify_token = request.args.get('hub.verify_token')
+    return challenge
+
+
+### routes for the client to GET pictures json
 @app.route("/pictures/latest")
 def get_pictures():
     return get_latest_pictures()
