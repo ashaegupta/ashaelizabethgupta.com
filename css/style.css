@@ -93,7 +93,11 @@ li {
 }
 
 .ribbon_image{
-    border-radius:0px;
+    border-radius: 1px;
+}
+
+.ribbon_image p:hover{
+    color: #000;
 }
 
 /*
