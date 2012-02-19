@@ -1,5 +1,9 @@
 from flask import Flask, json, request
+from instagram import client
 from pictures.model.Photo import Photo
+import local_settings
+import simplejson
+
 
 app = Flask(__name__)
 
@@ -12,13 +16,35 @@ def instagram_sub():
         #verify_token = request.args.get('hub.verify_token')
         return challenge
     elif request.method == 'POST':
-        try: 
-            print request.__dict__
-            print '\n\n'
-            print str(request.data)
-            
-        except: pass
+        process_instagram_post(request.data)
 
+def process_instagram_post(rdata):
+    json_data = simplejson.loads(rdata)
+    data = json_data.get('data')
+    if data:
+        for d in data:
+            # what's the type of the object?
+            # get the object from instagram
+            # save it in the database
+            if d.get('object') == 'user' and d.get('changed_aspect') == 'media':
+                user_id = d.get('object_id')
+                access_token = local_settings.access_tokens.get(user_id)
+                api = client.InstagramAPI(access_token=access_token)
+                min_timestamp = d.get('time')
+                pages = api.user_recent_media(as_generator=True,
+                                              return_json=True,
+                                              min_timestamp=min_timestamp,
+                                              max_pages=1000)
+                while True:
+                    try:
+                        page = pages.next()
+                    except StopIteration:
+                        break
+                    except Exception, e:
+                        print "Exception while getting data from instagram: %s" % e
+                    for p in page[0]:
+                        Photo.update(p)
+                        print "Saved a photo from user: %s" % user_id
 
 ### routes for the client to GET pictures json
 @app.route("/pictures/latest")
