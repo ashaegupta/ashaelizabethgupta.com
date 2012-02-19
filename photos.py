@@ -25,31 +25,31 @@ def process_instagram_post(rdata):
             e, rdata)
 
 ### routes for the client to GET pictures json
-@app.route("/pictures/latest")
-def get_pictures():
-    return get_latest_pictures()
+@app.route("/pictures/<user_id>/latest")
+def get_pictures(user_id):
+    return get_latest_pictures(user_id)
 
-@app.route("/pictures/olderthan/<created_time>")
-def get_pictures_older_than(created_time):
-    return get_latest_pictures(older_than=created_time)
+@app.route("/pictures/<user_id>/olderthan/<created_time>")
+def get_pictures_older_than(user_id, created_time):
+    return get_latest_pictures(user_id, older_than=created_time)
 
-@app.route("/pictures/newerthan/<created_time>")
-def get_pictures_newer_than(created_time):
-    return get_latest_pictures(newer_than=created_time)
+@app.route("/pictures/<user_id>/newerthan/<created_time>")
+def get_pictures_newer_than(user_id, created_time):
+    return get_latest_pictures(user_id, newer_than=created_time)
 
-@app.route("/pictures/around/<created_time>")
-def get_pictures_around(created_time):
-    return get_latest_pictures(around=created_time)
+@app.route("/pictures/<user_id>/around/<created_time>")
+def get_pictures_around(user_id, created_time):
+    return get_latest_pictures(user_id, around=created_time)
 
-def get_latest_pictures(older_than=None, newer_than=None, around=None):
+def get_latest_pictures(user_id, older_than=None, newer_than=None, around=None):
     if older_than:
-        photos = Photo.get_photos(older_than=older_than)
+        photos = Photo.get_photos(user_id, older_than=older_than)
     elif newer_than:
-        photos = Photo.get_photos(newer_than=newer_than)
+        photos = Photo.get_photos(user_id, newer_than=newer_than)
     elif around:
-        photos = Photo.get_photos(around=around)
+        photos = Photo.get_photos(user_id, around=around)
     else:
-        photos = Photo.get_photos()
+        photos = Photo.get_photos(user_id)
 
     # deal with a jsonp request
     callback = request.args.get('callback')
