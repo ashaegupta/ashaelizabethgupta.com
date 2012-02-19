@@ -115,7 +115,8 @@ asha.loadDeferredImages = function() {
 var photos = photos || {};
 photos.currentPhoto = 0;
 photos.photoList = null;
-photos.baseUrl = 'http://ashaelizabethgupta.com/pictures/';
+photos.user_id = '263093';
+photos.baseUrl = 'http://ashaelizabethgupta.com/pictures/' + photos.user_id + '/';
 photos.callbackArg = '?callback=';
 photos.latestCallback = photos.callbackArg + 'photos.getLatestPhotos';
 photos.olderCallback = photos.callbackArg + 'photos.getOlderPhotos';

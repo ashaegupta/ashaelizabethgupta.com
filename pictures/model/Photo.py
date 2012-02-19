@@ -27,13 +27,15 @@ class Photo(MongoMixIn):
         return klass.mdbc().find_one({klass.A_CREATED_TIME: t})
 
     @classmethod
-    def get_photos(klass, around=None, older_than=None, newer_than=None, limit=20, return_list=True):
-        ignore_query = {klass.A_IGNORE: {"$ne":1}}
+    def get_photos(klass, user_id, around=None, older_than=None, newer_than=None, limit=20, return_list=True, return_cursor=False):
+        query = defaultdict(dict)
+        query['user.id'] = user_id
+        query[klass.A_IGNORE] = {"$ne":1}
+
         sort_dir = DESCENDING
         if around:
-            return klass.get_photos_around(around, limit)
+            return klass.get_photos_around(user_id, around, limit)
 
-        query = defaultdict(dict)
         if older_than and newer_than and older_than > newer_than:
             return []
         if older_than:
@@ -41,22 +43,26 @@ class Photo(MongoMixIn):
         if newer_than:
             query[klass.A_CREATED_TIME].update({"$gt":newer_than})
             sort_dir = ASCENDING
-        query.update(ignore_query)
         cursor = klass.mdbc().find(query).sort(klass.A_CREATED_TIME, sort_dir).limit(limit)
+        if return_cursor:
+            return cursor
         response = [l for l in cursor]
         response.sort(key = lambda x: x.get(klass.A_CREATED_TIME), reverse=True)
         return response
 
     @classmethod
-    def get_photos_around(klass, around, limit):
+    def get_photos_around(klass, user_id, around, limit):
+        user_query = {'user.id':user_id}
         ignore_query = {klass.A_IGNORE: {"$ne":1}}
         above_query = {klass.A_CREATED_TIME:{"$gte":around}}
         above_query.update(ignore_query)
+        above_query.update(user_query)
         above = klass.mdbc().find(above_query).sort(klass.A_CREATED_TIME).limit(limit/2)
         result = [a for a in above]
 
         below_query = {klass.A_CREATED_TIME:{"$lt":around}}
         below_query.update(ignore_query)
+        below_query.update(user_query)
         below = klass.mdbc().find(below_query).limit(limit/2)
         result += [b for b in below]
 
