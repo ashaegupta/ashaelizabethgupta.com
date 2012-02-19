@@ -1,5 +1,7 @@
 from flask import Flask, json, request
 from pictures.model.Photo import Photo
+from pictures.lib.PhotoSaver import PhotoSaver
+import simplejson
 
 app = Flask(__name__)
 
@@ -12,13 +14,15 @@ def instagram_sub():
         #verify_token = request.args.get('hub.verify_token')
         return challenge
     elif request.method == 'POST':
-        try: 
-            print request.__dict__
-            print '\n\n'
-            print str(request.data)
-            
-        except: pass
+        process_instagram_post(simplejson.loads(request.data))
 
+def process_instagram_post(rdata):
+    try:
+        json_data = simplejson.loads(rdata)
+        PhotoSaver.process_instagram_post(json_data)
+    except Exception, e:
+        print "Error trying to process instagram's post: %s, data: %s" % (
+            e, rdata)
 
 ### routes for the client to GET pictures json
 @app.route("/pictures/latest")
