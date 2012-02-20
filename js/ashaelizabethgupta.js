@@ -255,6 +255,11 @@ photos.hideHelpText = function() {
     } else {
         photos.changedOnce = true;
     }
+    if (photos.changedSource == 'click') {
+        next_help.style.color = 'black';
+        next_help.innerHTML = 'hint: use the keyboard\'s left and right keys';
+        photos.changedSource = null;
+    }
 };
 
 photos.showNextPhoto = function() {
@@ -289,11 +294,23 @@ photos.bindEventsToPrevNextLink = function() {
     /* make the next and prev photo buttons clickable */
     var prev_link = document.getElementById('picture_prev_link');
     asha.listen(prev_link, 'click', function() {
+        photos.changedSource = 'click';
+        photos.showPreviousPhoto();
+    });
+    var prev_help = document.getElementById('picture_prev_help');
+    asha.listen(prev_help, 'click', function() {
+        photos.changedSource = 'click';
         photos.showPreviousPhoto();
     });
 
     var next_link = document.getElementById('picture_next_link');
     asha.listen(next_link, 'click', function() {
+        photos.changedSource = 'click';
+        photos.showNextPhoto();
+    });
+    var next_help = document.getElementById('picture_next_help');
+    asha.listen(next_help, 'click', function() {
+        photos.changedSource = 'click';
         photos.showNextPhoto();
     });
 };
