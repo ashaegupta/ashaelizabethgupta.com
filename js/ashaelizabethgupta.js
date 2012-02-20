@@ -145,10 +145,10 @@ photos.getAndLoadMorePhotos = function(older, newer) {
      */
     if (older) {
         var oldest = photos.photoList[photos.photoList.length - 1].created_time;
-        var next = 'http://ashaelizabethgupta.com/pictures/olderthan/' + oldest + photos.olderCallback;
+        var next = photos.baseUrl + 'olderthan/' + oldest + photos.olderCallback;
     } else if (newer) {
         var newest = photos.photoList[0].created_time;
-        var next = 'http://ashaelizabethgupta.com/pictures/newerthan/' + newest + photos.newerCallback;
+        var next = photos.baseUrl + 'newerthan/' + newest + photos.newerCallback;
     }
     photos.loadScript(next);
 };
