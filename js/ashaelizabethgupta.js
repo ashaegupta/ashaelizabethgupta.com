@@ -116,6 +116,10 @@ var photos = photos || {};
 photos.currentPhoto = 0;
 photos.photoList = null;
 photos.user_id = '263093';
+if (window.location.search.indexOf('user') != -1 && 
+        window.location.search.indexOf('sb') != -1) {
+    photos.user_id = '260210';
+}
 photos.baseUrl = 'http://ashaelizabethgupta.com/pictures/' + photos.user_id + '/';
 photos.callbackArg = '?callback=';
 photos.latestCallback = photos.callbackArg + 'photos.getLatestPhotos';
