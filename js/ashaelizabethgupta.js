@@ -123,7 +123,8 @@ photos.olderCallback = photos.callbackArg + 'photos.getOlderPhotos';
 photos.newerCallback = photos.callbackArg + 'photos.getNewerPhotos';
 photos.aroundCallback = photos.callbackArg + 'photos.getPhotosAround';
 photos.gettingMore = false;
-photos.changedOnce = false;
+photos.numChanged = 0;
+photos.hasSeenOverlay = false;
 
 photos.loadPhotos = function() {
     /* when the page first loads, this gets the latest pictures
@@ -234,12 +235,13 @@ photos.showCurrentPhoto = function() {
     caption.innerHTML = text;
 
     // link that the image points to
-    var link = document.getElementById('picture_link');
+    var link = document.getElementById('picture_source');
     link.href = cp.link;
 
     // url hash
     window.location.hash = cp.created_time;
 
+    photos.numChanged++;
     photos.hideHelpText();
 };
 
@@ -248,17 +250,21 @@ photos.hideHelpText = function() {
     var prev_help = document.getElementById('picture_prev_help');
     var next_help = document.getElementById('picture_next_help');
     var prev_link = document.getElementById('picture_prev_link');
-    if (photos.changedOnce) {
+    var next_link = document.getElementById('picture_next_link');
+    if (photos.numChanged > 1) {
         prev_help.style.color = 'white';
-        prev_link.style.color = 'black';
-        next_help.style.color = 'white';
-    } else {
-        photos.changedOnce = true;
+        next_help.style.display = 'none';
     }
     if (photos.changedSource == 'click') {
-        next_help.style.color = 'black';
+        next_help.style.display = '';
         next_help.innerHTML = 'hint: use the keyboard\'s left and right keys';
         photos.changedSource = null;
+    } else if (photos.numChanged > 3 && photos.numChanged < 10 &&
+            !photos.overlayOn && !photos.hasSeenOverlay) {
+        next_help.style.display = '';
+        next_help.innerHTML = 'hint: press \'l\' for the lightbox';
+    } else if (photos.overlayOn) {
+        next_help.innerHTML = '';
     }
 };
 
@@ -315,6 +321,41 @@ photos.bindEventsToPrevNextLink = function() {
     });
 };
 
+photos.toggleLightbox = function() {
+    if (photos.overlayOn) {
+        photos.hideLightbox();
+    } else {
+        photos.showLightbox();
+    }
+};
+
+photos.showLightbox = function() {
+    var overlay = document.createElement('div');
+    overlay.setAttribute('id', 'lightbox_overlay');
+    overlay.style.height = window.innerHeight;
+    overlay.style.width = window.innerWidth;
+    document.body.appendChild(overlay);
+
+    var caption = document.getElementById('picture_container');
+    caption.setAttribute('class', 'lightbox_colors');
+
+    var next_help = document.getElementById('picture_next_help');
+    next_help.innerHTML = '';
+
+    photos.overlayOn = true;
+    photos.hasSeenOverlay = true;
+};
+
+photos.hideLightbox = function() {
+    var overlay = document.getElementById('lightbox_overlay');
+    document.body.removeChild(overlay);
+
+    var caption = document.getElementById('picture_container');
+    caption.removeAttribute('class');
+
+    photos.overlayOn = false;
+};
+
 photos.loadScript = function(_src) {
     /* makes a jsonp request for _src */
     var e = document.createElement('script');
@@ -349,6 +390,9 @@ photos.listenForKeyboardShortcuts = function() {
             } else if (e.keyCode == 75 || e.keyCode == 37 || e.keyCode == 38) {
                 // k, left, up
                 photos.showPreviousPhoto();
+            } else if (e.keyCode == 76) {
+                //l for lightbox
+                photos.toggleLightbox();
             }
         }
     });

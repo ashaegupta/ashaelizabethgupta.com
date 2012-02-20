@@ -1,7 +1,10 @@
 from flask import Flask, json, request
 from pictures.model.Photo import Photo
 from pictures.lib.PhotoSaver import PhotoSaver
+from pictures import local_settings
 import simplejson
+import hmac
+import hashlib
 
 app = Flask(__name__)
 
@@ -14,7 +17,9 @@ def instagram_sub():
         #verify_token = request.args.get('hub.verify_token')
         return challenge
     elif request.method == 'POST':
-        process_instagram_post(request.data)
+        if verify_instagram_post(signature=request.header.get('X-Hub-Signature'),
+                                 body=request.body.read()):
+            process_instagram_post(request.data)
 
 def process_instagram_post(rdata):
     try:
@@ -23,6 +28,14 @@ def process_instagram_post(rdata):
     except Exception, e:
         print "Error trying to process instagram's post: %s, data: %s" % (
             e, rdata)
+
+def verify_instagram_post(signature, body):
+    client_secret = local_settings.client_secret
+    digest = hmac.new(client_secret.encode('utf-8'),
+                      msg = body.encode('utf-8'),
+                      digestmod = hashlib.sha1
+                     ).hexdigest()
+    return digest == signature
 
 ### routes for the client to GET pictures json
 @app.route("/pictures/<user_id>/latest")

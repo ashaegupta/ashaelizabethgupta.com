@@ -3,6 +3,7 @@ body {
     font-family: "Helvetica Neue", Arial, Helvetica, sans-serif;
     font-size:13px;
     color: #393E45;
+    margin: 0px !important;
 }
 a {
     text-decoration: none;
@@ -20,6 +21,7 @@ a {
  * header
  */
 .header {
+    margin-top: 8px;
     height: auto;
     vertical-align: top;
     float: right;
@@ -194,13 +196,15 @@ li {
 
 #picture_img {
     width: 500px;
+    border: 1px solid white;
 }
 
 #picture {
     float:left;
     position: relative;
-    right: 51px;
+    right: 52px;
     min-width: 500px;
+    z-index: 100;
 }
 
 .picture_link {
@@ -211,6 +215,7 @@ li {
     position: relative;
     top: 250px;
     cursor: hand;
+    z-index: 100;
 }
 
 .picture_help {
@@ -237,7 +242,6 @@ li {
     right: 40px;
 }
 
-
 #picture_caption {
     font-family: "Gill Sans", Arial, Helvetica, sans-serif;
     font-size: 14px;
@@ -245,10 +249,23 @@ li {
     padding-top: 10px;
     padding-left: 1px;
     line-height: 15px; 
+    position: fixed;
     width: 500px;
 }
 
 #picture_cache_warmer {
     display: none;
+}
+
+#lightbox_overlay {
+    position: absolute;
+    background: black;
+    opacity: 0.9;
+    top:0%;
+}
+
+.lightbox_colors > .lightbox_text {
+    color: white;
+    z-index: 100;
 }
 
