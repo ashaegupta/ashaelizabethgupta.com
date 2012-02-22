@@ -12,14 +12,15 @@ app = Flask(__name__)
 @app.route("/pictures/instagram/sub", methods=['GET', 'POST'])
 def instagram_sub():
     if request.method == 'GET':
-        #mode = request.args.get('hub.mode')
         challenge = request.args.get('hub.challenge')
-        #verify_token = request.args.get('hub.verify_token')
         return challenge
     elif request.method == 'POST':
-        if verify_instagram_post(signature=request.header.get('X-Hub-Signature'),
-                                 body=request.body.read()):
-            process_instagram_post(request.data)
+        signature = request.headers.get('X-Hub-Signature')
+        body = request.data
+        if verify_instagram_post(signature, body):
+            process_instagram_post(body)
+        else:
+            print "Could not verify instagram post"
 
 def process_instagram_post(rdata):
     try:
