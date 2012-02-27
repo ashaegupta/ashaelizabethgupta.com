@@ -27,6 +27,14 @@ class Photo(MongoMixIn):
         return klass.mdbc().find_one({klass.A_CREATED_TIME: t})
 
     @classmethod
+    def mark_as_ignored_by_created_time(klass, created_time):
+        p = klass.find_by_created_time(created_time)
+        if p:
+            p[klass.A_IGNORE] = 1
+            return klass.update(p)
+        return False
+
+    @classmethod
     def get_photos(klass, user_id, around=None, older_than=None, newer_than=None, limit=20, return_list=True, return_cursor=False):
         query = defaultdict(dict)
         query['user.id'] = user_id
@@ -105,6 +113,10 @@ class Photo(MongoMixIn):
 
     @classmethod
     def update(klass, doc):
+        try:
+            del doc['_id']
+        except KeyError:
+            pass
         id = doc.get(klass.A_ID)
         spec = {klass.A_ID: id}
         document = {"$set": doc}
