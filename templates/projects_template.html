@@ -24,7 +24,7 @@
                     </div>
                     <div class="project_category" id="ux_category">
                         <div style="display:inline-block">
-                            <div class="ux_category_purple_bar"
+                            <div class="project_category_purple_bar"
                                 id="ux_purple"></div>
                         <a href="#ux">User Experience</a>
                         </div>
@@ -60,10 +60,10 @@
                     {% endfor %}
                 </div>
                 <div class="project_list" id="ux_list">
-                    <div class="ux_mantra">
+                    <div class="project_mantra">
                         {{ux_mantra}}
                     </div>
-                    {% for u in product %}
+                    {% for u in ux %}
                         {% include 'ux_item_template.html' %}
                     {% endfor %}
                 </div>

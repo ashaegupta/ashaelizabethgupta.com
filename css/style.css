@@ -113,7 +113,7 @@ li {
 }
 .project_category {
     display: inline-block;
-    width: 24%;
+    width: 19%;
 }
 .project_list {
     padding: 20px;
@@ -185,6 +185,20 @@ li {
 .project_tags {
    margin-top: 10px; 
 }
+
+.ux {
+    float: left;
+    margin-right: 40px;
+    margin-bottom: 30px;
+    min-width: 200px;
+}
+.ux_image {}
+.ux_label {}
+.ux_title {
+    font-weight: bold;
+}
+.ux_type {}
+.ux_description {}
 
 /*
  * pictures
