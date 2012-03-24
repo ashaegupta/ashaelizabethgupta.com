@@ -1,4 +1,6 @@
 var asha = asha || {};
+asha.slideshow = asha.slideshow || {};
+
 asha.default_project = 'product';
 
 asha.listen = function(el, evnt, func) {
@@ -109,6 +111,51 @@ asha.loadDeferredImages = function() {
         }
     }
 };
+
+// ********* modal lightbox slideshows for the ux tab **********
+
+asha.slideshow.modal_id = 'slideshow_modal';
+
+asha.slideshow.start = function(slideshow_label) {
+    asha.slideshow.openModalLightbox();
+    photos.listenForKeyboardShortcuts();
+};
+
+asha.slideshow.openModalLightbox = function() {
+    /* Two steps:
+     * 1. create a translucent overlay for the entire page
+     * 2. create a div on top of that to hold the slide show
+     */
+    if (! photos.overlayOn) {
+        photos.createLightboxOverlay(0.6);
+    }
+
+    asha.slideshow.showModal();
+};
+
+asha.slideshow.closeModalLightbox = function() {
+    /*
+     */
+    asha.slideshow.hideModal();
+    photos.removeLightboxOverlay(); 
+};
+
+asha.slideshow.showModal = function() {
+    /*
+     */
+    var modal = document.createElement('div');
+    modal.setAttribute('id', asha.slideshow.modal_id);
+    modal.innerHTML = "<img src='http://dl.dropbox.com/u/1654579/Jing/movetogether.001.png'/>";
+    document.body.appendChild(modal);
+};
+
+asha.slideshow.hideModal = function() {
+    /*
+     */
+    var modal = document.getElementById(asha.slideshow.modal_id);
+    document.body.removeChild(modal);
+};
+
 
 // ********* photos *********
 // code for the photos slideshow
@@ -333,12 +380,30 @@ photos.toggleLightbox = function() {
     }
 };
 
-photos.showLightbox = function() {
+photos.createLightboxOverlay = function(opacity) {
+    if (!opacity) {
+        opacity = 0.9;
+    }
+
     var overlay = document.createElement('div');
     overlay.setAttribute('id', 'lightbox_overlay');
-    overlay.style.height = window.innerHeight;
-    overlay.style.width = window.innerWidth;
+    overlay.style.opacity = opacity;
+    overlay.style.height = document.body.scrollHeight;
+    overlay.style.width = document.body.scrollWidth;
     document.body.appendChild(overlay);
+
+    photos.overlayOn = true;
+};
+
+photos.removeLightboxOverlay = function() {
+    var overlay = document.getElementById('lightbox_overlay');
+    document.body.removeChild(overlay);
+
+    photos.overlayOn = false;
+};
+
+photos.showLightbox = function() {
+    photos.createLightboxOverlay();
 
     var caption = document.getElementById('picture_container');
     caption.setAttribute('class', 'lightbox_colors');
@@ -346,18 +411,14 @@ photos.showLightbox = function() {
     var next_help = document.getElementById('picture_next_help');
     next_help.innerHTML = '';
 
-    photos.overlayOn = true;
     photos.hasSeenOverlay = true;
 };
 
 photos.hideLightbox = function() {
-    var overlay = document.getElementById('lightbox_overlay');
-    document.body.removeChild(overlay);
+    photos.removeLightboxOverlay();
 
     var caption = document.getElementById('picture_container');
     caption.removeAttribute('class');
-
-    photos.overlayOn = false;
 };
 
 photos.loadScript = function(_src) {
@@ -397,6 +458,9 @@ photos.listenForKeyboardShortcuts = function() {
             } else if (e.keyCode == 76) {
                 //l for lightbox
                 photos.toggleLightbox();
+            } else if (e.keyCode == 27) {
+                // esc
+                asha.slideshow.closeModalLightbox();
             }
         }
     });
