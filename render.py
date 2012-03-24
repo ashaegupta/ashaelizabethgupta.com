@@ -2,13 +2,15 @@
 
 import codecs
 from jinja2 import Environment, FileSystemLoader
-from project_data import project_data # json data for projects
+from project_data import project_data, ux_data # json data for projects
+
+combined_project_data = dict(project_data.data.items() + ux_data.data.items()),
 
 templates_dir = 'templates'
 
 templates_to_render = {
     'index':{'index_page':1},
-    'projects':project_data.data,
+    'projects': combined_project_data,
     'pictures':{'pictures_page':1}
 }
 

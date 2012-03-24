@@ -22,6 +22,13 @@
                             <a href="#product">Strategy</a>
                         </div>
                     </div>
+                    <div class="project_category" id="ux_category">
+                        <div style="display:inline-block">
+                            <div class="ux_category_purple_bar"
+                                id="ux_purple"></div>
+                        <a href="#ux">User Experience</a>
+                        </div>
+                    </div>
                     <div class="project_category" id="programming_category">
                         <div style="display:inline-block">
                             <div class="project_category_purple_bar"
@@ -50,6 +57,14 @@
                     </div>
                     {% for p in product %}
                         {% include 'project_item_template.html' %}
+                    {% endfor %}
+                </div>
+                <div class="project_list" id="ux_list">
+                    <div class="ux_mantra">
+                        {{ux_mantra}}
+                    </div>
+                    {% for u in product %}
+                        {% include 'ux_item_template.html' %}
                     {% endfor %}
                 </div>
                 <div class="project_list" id="programming_list">

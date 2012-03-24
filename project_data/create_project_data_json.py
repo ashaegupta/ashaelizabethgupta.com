@@ -52,6 +52,7 @@ def write_project_data():
     data[u'development_mantra'] = unicode("Nothing like a good commit.")
     data[u'data_mantra'] = unicode("Intuition is fantastic, intuition backed by robust data, even better.")
     data[u'personal_mantra'] = unicode("'You are already naked. There is no reason not to follow your heart.' -- Steve Jobs")
+    data[u'ux_mantra'] = unicode("I like pretty things")
 
     print "saving file..."
     data_str = "data = %s" % dict(data)
@@ -87,10 +88,7 @@ def write_ux_data():
             item[value] = val
 
         # and save the dictionary in the array of all ux data
-        data['ux_data'].append(item)
-
-    data['ux_page'] = 1
-    data['ux_mantra'] = ''
+        data['ux'].append(item)
 
     print "saving file..."
     data_str = "data = %s" % dict(data)
