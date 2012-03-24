@@ -1,8 +1,12 @@
 import csv
+import pprint
 from collections import defaultdict
 
 project_csv_file = 'projects.csv'
 projects_data_py_file = 'project_data.py'
+
+ux_csv_file = 'ux.csv'
+ux_data_py_file = 'ux_data.py'
 
 def utf_8_encoder(unicode_csv_data):
     for line in unicode_csv_data:
@@ -54,8 +58,49 @@ def write_project_data():
     print data_str
     projects_data_file = open(projects_data_py_file, mode='w')
     projects_data_file.write(data_str)
+    projects_data_file.close()
+
+def write_ux_data():
+    print "reading ux csv file..."
+    reader = csv.reader(open(ux_csv_file, 'rb'), delimiter=',')
+
+    # attributes of the csv file, in order
+    attrs = ['title', 'ux_type', 'description', 'pic_url', 'slideshow_folder', 'title_url']
+
+    print "creating dict..."
+    data = defaultdict(list)
+
+    # skip the first row
+    reader.next() 
+    # for each row in the csv file...
+    for row in reader:
+        # convert the row to unicode
+        row = [unicode(cell, 'utf-8') for cell in row]
+
+        # put the attributes into a dictionary...
+        item = dict()
+        for index, value in enumerate(attrs):
+            try:
+                val = unicode(row[index])
+            except:
+                val = ''
+            item[value] = val
+
+        # and save the dictionary in the array of all ux data
+        data['ux_data'].append(item)
+
+    data['ux_page'] = 1
+    data['ux_mantra'] = ''
+
+    print "saving file..."
+    data_str = "data = %s" % dict(data)
+    print pprint.pformat(dict(data))
+    ux_data_file = open(ux_data_py_file, mode='w')
+    ux_data_file.write(data_str)
+    ux_data_file.close()
 
 if __name__ == "__main__":
     print "running..."
     write_project_data()
+    write_ux_data()
     print "done."
