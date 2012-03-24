@@ -65,14 +65,12 @@ def write_ux_data():
     print "reading ux csv file..."
     reader = csv.reader(open(ux_csv_file, 'rb'), delimiter=',')
 
-    # attributes of the csv file, in order
-    attrs = ['title', 'ux_type', 'description', 'pic_url', 'slideshow_folder', 'title_url']
+    # attributes of the csv file are in the first row
+    attrs = reader.next()
 
     print "creating dict..."
     data = defaultdict(list)
 
-    # skip the first row
-    reader.next() 
     # for each row in the csv file...
     for row in reader:
         # convert the row to unicode
