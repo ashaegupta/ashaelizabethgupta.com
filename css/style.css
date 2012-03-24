@@ -289,10 +289,11 @@ li {
     left: 50%;
     z-index: 6;
     width: 1050px;
-    height: 750px;
-    margin-top: -375px;
+    height: 560px;
+    margin-top: -300px;
     margin-left: -525px;
     position: fixed;
     border-radius: 10;
     border: black solid 2;
+    padding: 20px;
 };
