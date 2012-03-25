@@ -2,7 +2,7 @@
 
 import codecs
 from jinja2 import Environment, FileSystemLoader
-from project_data import project_data, ux_data # json data for projects
+from project_data.outputs import project_data, ux_data # json data for projects
 
 combined_project_data = dict(project_data.data.items() + ux_data.data.items())
 
