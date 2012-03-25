@@ -2,11 +2,11 @@ import csv
 import pprint
 from collections import defaultdict
 
-project_csv_file = 'projects.csv'
-projects_data_py_file = 'project_data.py'
+project_csv_file = 'inputs/projects.csv'
+ux_csv_file = 'inputs/ux.csv'
 
-ux_csv_file = 'ux.csv'
-ux_data_py_file = 'ux_data.py'
+projects_data_py_file = 'outputs/project_data.py'
+ux_data_py_file = 'outputs/ux_data.py'
 
 def utf_8_encoder(unicode_csv_data):
     for line in unicode_csv_data:
@@ -94,6 +94,10 @@ def write_ux_data():
     ux_data_file = open(ux_data_py_file, mode='w')
     ux_data_file.write(data_str)
     ux_data_file.close()
+
+def write_ux_image_list_data():
+    print "checking contents of /static/images/ux/"
+
 
 if __name__ == "__main__":
     print "running..."
