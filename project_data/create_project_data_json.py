@@ -11,7 +11,8 @@ ux_image_directory_for_static = 'static/images/ux/'
 
 projects_data_py_file = 'outputs/project_data.py'
 ux_data_py_file = 'outputs/ux_data.py'
-ux_images_py_file = '../static/json/ux_images.json'
+#ux_images_py_file = '../static/json/ux_images.json'
+ux_images_py_file = 'outputs/ux_images.py'
 
 def utf_8_encoder(unicode_csv_data):
     for line in unicode_csv_data:
@@ -114,9 +115,10 @@ def write_ux_image_list_data():
                                         file) for file in files]
 
     print "saving file %s..." % ux_images_py_file
-    data_json = simplejson.dumps(image_data)
+    #data_json = simplejson.dumps(image_data)
+    data_str = "data = %s" % dict(image_data)
     ux_data_file = open(ux_images_py_file, mode='w')
-    ux_data_file.write(data_json)
+    ux_data_file.write(data_str)
     ux_data_file.close()
         
 

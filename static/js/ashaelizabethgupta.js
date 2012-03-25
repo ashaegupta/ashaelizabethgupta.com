@@ -117,11 +117,11 @@ asha.loadDeferredImages = function() {
 asha.slideshow.modal_id = 'slideshow_modal';
 
 asha.slideshow.start = function(slideshow_label) {
-    asha.slideshow.openModalLightbox();
+    asha.slideshow.openModalLightbox(slideshow_label);
     photos.listenForKeyboardShortcuts();
 };
 
-asha.slideshow.openModalLightbox = function() {
+asha.slideshow.openModalLightbox = function(label) {
     /* Two steps:
      * 1. create a translucent overlay for the entire page
      * 2. create a div on top of that to hold the slide show
@@ -129,8 +129,7 @@ asha.slideshow.openModalLightbox = function() {
     if (! photos.overlayOn) {
         photos.createLightboxOverlay(0.6);
     }
-
-    asha.slideshow.showModal();
+    asha.slideshow.showModal(label);
 };
 
 asha.slideshow.closeModalLightbox = function() {
@@ -140,12 +139,12 @@ asha.slideshow.closeModalLightbox = function() {
     photos.removeLightboxOverlay(); 
 };
 
-asha.slideshow.showModal = function() {
+asha.slideshow.showModal = function(label) {
     /*
      */
     var modal = document.createElement('div');
     modal.setAttribute('id', asha.slideshow.modal_id);
-    modal.innerHTML = "<img src='http://dl.dropbox.com/u/1654579/Jing/movetogether.001.png'/>";
+    modal.innerHTML = "<img src='" + window.asha_ux_images[label][0] + "'/>";
     document.body.appendChild(modal);
 };
 

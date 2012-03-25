@@ -1,10 +1,12 @@
 # render html files for the project using jinja2 templates
 
 import codecs
+import simplejson
 from jinja2 import Environment, FileSystemLoader
-from project_data.outputs import project_data, ux_data # json data for projects
+from project_data.outputs import project_data, ux_data, ux_images
 
 combined_project_data = dict(project_data.data.items() + ux_data.data.items())
+combined_project_data['ux_images'] = simplejson.dumps(ux_images.data)
 
 templates_dir = 'templates'
 env = Environment(loader = FileSystemLoader(templates_dir))
@@ -16,9 +18,11 @@ templates_to_render = {
 }
 
 for template_root, template_data in templates_to_render.iteritems():
+
     template_name = "%s_template.html" % template_root
     template = env.get_template(template_name)
     html = template.render(template_data)
+
     file_name = "%s.html" % template_root
     f = codecs.open(file_name, encoding='utf-8', mode='w')
     f.write(html)
