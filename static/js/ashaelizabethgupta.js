@@ -115,42 +115,73 @@ asha.loadDeferredImages = function() {
 // ********* modal lightbox slideshows for the ux tab **********
 
 asha.slideshow.modal_id = 'slideshow_modal';
+asha.slideshow.img_id = 'slideshow_img';
+asha.slideshow.label = null;
+asha.slideshow.currentSlide = null;
+asha.slideshow.numSlides = null;
 
 asha.slideshow.start = function(slideshow_label) {
-    asha.slideshow.openModalLightbox(slideshow_label);
-    photos.listenForKeyboardShortcuts();
+    asha.slideshow.ux_images = window.asha_ux_images;
+    asha.slideshow.label = slideshow_label;
+    asha.slideshow.numSlides = asha.slideshow.ux_images[slideshow_label].length; 
+    asha.slideshow.openModalLightbox();
+    asha.slideshow.showSlide(0);
+    photos.listenForKeyboardShortcuts('ux');
 };
 
-asha.slideshow.openModalLightbox = function(label) {
-    /* Two steps:
-     * 1. create a translucent overlay for the entire page
-     * 2. create a div on top of that to hold the slide show
-     */
-    if (! photos.overlayOn) {
-        photos.createLightboxOverlay(0.6);
+asha.slideshow.showSlide = function(slide_num) {
+    if (slide_num >= asha.slideshow.numSlides) {
+        return false;
+    } 
+    var src = asha.slideshow.ux_images[asha.slideshow.label][slide_num];
+    var img = asha.slideshow.getOrCreateImgElement();
+    img.setAttribute('src', src);
+};
+
+asha.slideshow.getOrCreateImgElement = function() {
+    var img = document.getElementById(asha.slideshow.img_id);
+    if (!img) {
+        img = document.createElement('img');
+        img.setAttribute('id', asha.slideshow.img_id);
+        var modal = document.getElementById(asha.slideshow.modal_id);
+        modal.appendChild(img);
     }
-    asha.slideshow.showModal(label);
+    return img;
+};
+
+asha.slideshow.showNextSlide = function() {
+    if (asha.slideshow.currentSlide == asha.slideshow.numSlides - 1) {
+        return false;
+    }
+    asha.slideshow.currentSlide++;
+    asha.slideshow.showSlide(asha.slideshow.currentSlide);
+};
+
+asha.slideshow.showPreviousSlide = function() {
+    if (asha.slideshow.currentSlide == 0) {
+        return false;
+    }
+    asha.slideshow.currentSlide--;
+    asha.slideshow.showSlide(asha.slideshow.currentSlide);
+};
+
+asha.slideshow.openModalLightbox = function() {
+    photos.createLightboxOverlay(0.6);
+    asha.slideshow.showModal();
 };
 
 asha.slideshow.closeModalLightbox = function() {
-    /*
-     */
     asha.slideshow.hideModal();
     photos.removeLightboxOverlay(); 
 };
 
-asha.slideshow.showModal = function(label) {
-    /*
-     */
+asha.slideshow.showModal = function() {
     var modal = document.createElement('div');
     modal.setAttribute('id', asha.slideshow.modal_id);
-    modal.innerHTML = "<img src='" + window.asha_ux_images[label][0] + "'/>";
     document.body.appendChild(modal);
 };
 
 asha.slideshow.hideModal = function() {
-    /*
-     */
     var modal = document.getElementById(asha.slideshow.modal_id);
     document.body.removeChild(modal);
 };
@@ -430,7 +461,13 @@ photos.loadScript = function(_src) {
     parent.appendChild(e); 
 };
 
-photos.listenForKeyboardShortcuts = function() {
+photos.listenForKeyboardShortcuts = function(app) {
+    // TODO: pass in an object mapping keycodes to functions
+    // and loop through that to set up listeners
+    if (!app) {
+        app = 'pictures';
+    }
+
     document.addEventListener('keydown', function(e) {
         // we're trying to identify the element for which this event was fired, 
         // and then decide whether or not to set off the shortcut
@@ -450,16 +487,32 @@ photos.listenForKeyboardShortcuts = function() {
 
             if (e.keyCode == 74 || e.keyCode == 39 || e.keyCode == 40) {
                 // j, right, down
-                photos.showNextPhoto();
+                if (app == 'ux') {
+                    asha.slideshow.showNextSlide();
+                } else if (app == 'pictures') {
+                    photos.showNextPhoto();
+                }
             } else if (e.keyCode == 75 || e.keyCode == 37 || e.keyCode == 38) {
                 // k, left, up
-                photos.showPreviousPhoto();
+                if (app == 'ux') {
+                    asha.slideshow.showPreviousSlide();
+                } else if (app == 'pictures') {
+                    photos.showPreviousPhoto();
+                }
             } else if (e.keyCode == 76) {
                 //l for lightbox
-                photos.toggleLightbox();
+                if (app == 'ux') {
+                    // pass
+                } else if (app == 'pictures') {
+                    photos.toggleLightbox();
+                }
             } else if (e.keyCode == 27) {
                 // esc
-                asha.slideshow.closeModalLightbox();
+                if (app == 'ux') {
+                    asha.slideshow.closeModalLightbox();
+                } else if (app == 'pictures') {
+                    // pass
+                }
             }
         }
     });
