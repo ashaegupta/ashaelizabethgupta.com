@@ -13,7 +13,7 @@ env = Environment(loader = FileSystemLoader(templates_dir))
 
 templates_to_render = {
     'index':{'index_page':1},
-    'projects': combined_project_data,
+    'portfolio': combined_project_data,
     'pictures':{'pictures_page':1}
 }
 
