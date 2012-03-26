@@ -40,7 +40,7 @@ def write_project_data():
     data[u'development_mantra'] = unicode("Nothing like a good commit.")
     data[u'data_mantra'] = unicode("Intuition is fantastic, intuition backed by robust data, even better.")
     data[u'personal_mantra'] = unicode("'You are already naked. There is no reason not to follow your heart.' -- Steve Jobs")
-    data[u'ux_mantra'] = unicode("Good design stays out of the way")
+    data[u'ux_mantra'] = unicode("Good design stays out of the way.")
 
     print "saving file %s..." % projects_data_py_file
     data_str = "data = %s" % dict(data)
