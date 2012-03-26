@@ -135,13 +135,13 @@ li {
 .project {
     margin-bottom:40px;
 }
-.project a {
+.project a, .ux_title a {
     color: black;
     font-weight: bold;
     text-decoration: none;
     border-bottom: 1px dotted black;
 }
-.project a:hover {
+.project a:hover, .ux_title a:hover {
     color: #A878E3;
     font-weight: bold;
     text-decoration: none;
@@ -189,7 +189,7 @@ li {
 .ux {
     float: left;
     margin-right: 40px;
-    margin-bottom: 30px;
+    margin-bottom: 40px;
     min-width: 200px;
 }
 
@@ -199,10 +199,10 @@ li {
 }
 .ux_label{
     color: black;
-    margin-top: 5px;
 }
 
 .ux_title {
+    margin-top: 10px;
     font-weight: bold;
 }
 .ux_type {}
