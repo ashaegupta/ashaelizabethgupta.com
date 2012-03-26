@@ -1,18 +1,20 @@
 import os
-import simplejson
 import csv
 import pprint
 from collections import defaultdict
 
-project_csv_file = 'inputs/projects.csv'
-ux_csv_file = 'inputs/ux.csv'
-ux_images_directory = '../static/images/ux'
-ux_image_directory_for_static = 'static/images/ux/'
+# input files
+input_dir                       = 'project_data/inputs'
+project_csv_file                = os.path.join(input_dir, 'projects.csv')
+ux_csv_file                     = os.path.join(input_dir, 'ux.csv')
+ux_images_directory             = 'static/images/ux'
+ux_image_directory_for_static   = 'static/images/ux/'
 
-projects_data_py_file = 'outputs/project_data.py'
-ux_data_py_file = 'outputs/ux_data.py'
-#ux_images_py_file = '../static/json/ux_images.json'
-ux_images_py_file = 'outputs/ux_images.py'
+# output files
+output_dir              = 'project_data/outputs'
+projects_data_py_file   = os.path.join(output_dir, 'project_data.py')
+ux_data_py_file         = os.path.join(output_dir, 'ux_data.py')
+ux_images_py_file       = os.path.join(output_dir, 'ux_images.py')
 
 def utf_8_encoder(unicode_csv_data):
     for line in unicode_csv_data:
@@ -23,34 +25,17 @@ def write_project_data():
     reader = csv.reader(open(project_csv_file, 'rb'), delimiter=',')
     data = defaultdict(list)
     print "creating dict..."
+    attrs = ['type', 'name', 'service', 'description', 
+             'skills', 'picture', 'my_work_url', 'company_url']
     for row in reader:
         row = [unicode(cell, 'utf-8') for cell in row]
-        try: type = row[0]
-        except: type = ''
-        try: name = row[1]
-        except: name = ''
-        try: service = row[2]
-        except: service = ''
-        try: description = row[3]
-        except: description = ''
-        try: skills = row[4]
-        except: skills = ''
-        try: picture = row[5]
-        except: picture = ''
-        try: my_work_url = row[6]
-        except: my_work_url = ''
-        try: company_url = row[7]
-        except: company_url = ''
-        item = {
-            u'name':         unicode(name), 
-            u'service':      unicode(service), 
-            u'description':  unicode(description), 
-            u'skills':       unicode(skills), 
-            u'picture':      unicode(picture), 
-            u'my_work_url':  unicode(my_work_url), 
-            u'company_url':  unicode(company_url)
-        }
-        data[type.lower()].append(item)
+        item = dict()
+        for index, attr in enumerate(attrs):
+            try:
+                item[attr] = unicode(row[index])
+            except:
+                pass
+        data[item['type'].lower()].append(item)
 
     print "adding other data..."
     data['projects_page'] = 1
@@ -58,7 +43,7 @@ def write_project_data():
     data[u'development_mantra'] = unicode("Nothing like a good commit.")
     data[u'data_mantra'] = unicode("Intuition is fantastic, intuition backed by robust data, even better.")
     data[u'personal_mantra'] = unicode("'You are already naked. There is no reason not to follow your heart.' -- Steve Jobs")
-    data[u'ux_mantra'] = unicode("I like pretty things")
+    data[u'ux_mantra'] = unicode("Good design stays out of the way")
 
     print "saving file %s..." % projects_data_py_file
     data_str = "data = %s" % dict(data)
@@ -70,10 +55,8 @@ def write_project_data():
 def write_ux_data():
     print "reading ux csv file..."
     reader = csv.reader(open(ux_csv_file, 'rb'), delimiter=',')
-
     # attributes of the csv file are in the first row
     attrs = reader.next()
-
     print "creating dict..."
     data = defaultdict(list)
 
@@ -81,15 +64,14 @@ def write_ux_data():
     for row in reader:
         # convert the row to unicode
         row = [unicode(cell, 'utf-8') for cell in row]
-
         # put the attributes into a dictionary...
         item = dict()
-        for index, value in enumerate(attrs):
+        for index, attr in enumerate(attrs):
             try:
                 val = unicode(row[index])
             except:
                 val = ''
-            item[value] = val
+            item[attr] = val
 
         # and save the dictionary in the array of all ux data
         data['ux'].append(item)
@@ -123,8 +105,6 @@ def write_ux_image_list_data():
     ux_data_file = open(ux_images_py_file, mode='w')
     ux_data_file.write(data_str)
     ux_data_file.close()
-        
-
 
 if __name__ == "__main__":
     print "running..."
