@@ -297,3 +297,33 @@ li {
     border: black solid 2;
     padding: 20px;
 };
+
+#slideshow_img_div {
+    text-align: center;
+}
+
+#slideshow_img {
+    max-height: 500px;
+}
+
+#slideshow_bottom {
+    position: absolute;
+    bottom: 0;
+    margin-bottom: 20px;
+    text-align: center;
+    width: 95%;
+}
+
+#slideshow_prev_slide {
+}
+
+#slideshow_slide_counter {
+    text-align: center;
+}
+
+#slideshow_next_slide {
+}
+
+#slideshow_esc {
+    float: right;
+}

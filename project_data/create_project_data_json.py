@@ -104,15 +104,18 @@ def write_ux_data():
 def write_ux_image_list_data():
     print "checking contents of /static/images/ux/"
     image_directories = os.listdir(ux_images_directory)
-    image_directories_to_ignore = ['drafts']
+    image_directories_to_ignore = ['drafts', '.DS_Store']
     image_data = dict()
     for dir in image_directories:
         if dir in image_directories_to_ignore:
             continue
-        files = os.listdir(os.path.join(ux_images_directory, dir))
-        image_data[dir] = [os.path.join(ux_image_directory_for_static,
-                                        dir, 
-                                        file) for file in files]
+        try:
+            files = os.listdir(os.path.join(ux_images_directory, dir))
+            image_data[dir] = [os.path.join(ux_image_directory_for_static,
+                                            dir, 
+                                            file) for file in files]
+        except Exception, e:
+            print "Error: %s" % e
 
     print "saving file %s..." % ux_images_py_file
     #data_json = simplejson.dumps(image_data)
