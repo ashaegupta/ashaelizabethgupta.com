@@ -184,7 +184,7 @@ asha.slideshow.setSlideCounter = function() {
 };
 
 asha.slideshow.openModalLightbox = function() {
-    photos.createLightboxOverlay(0.6);
+    photos.createLightboxOverlay(0.7);
     asha.slideshow.showModal();
 };
 

@@ -192,10 +192,16 @@ li {
     margin-bottom: 30px;
     min-width: 200px;
 }
+
 .ux_image {
-    min-height:100px
+    min-height: 100px;
+    /*border: #393E45 solid 1;*/
 }
-.ux_label {}
+.ux_label{
+    color: black;
+    margin-top: 5px;
+}
+
 .ux_title {
     font-weight: bold;
 }
