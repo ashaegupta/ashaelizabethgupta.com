@@ -77,6 +77,13 @@ def write_ux_data():
     ux_data_file.write(data_str)
     ux_data_file.close()
 
+def has_approved_extension(filename):
+    approved_extensions = ['png']
+    file_extension = filename.split('.')[-1]
+    if file_extension in approved_extensions:
+        return True
+    return False
+
 def write_ux_image_list_data():
     print "updating ux image list..."
     image_directories = os.listdir(ux_images_directory)
@@ -87,6 +94,8 @@ def write_ux_image_list_data():
             continue
         try:
             files = os.listdir(os.path.join(ux_images_directory, dir))
+            # filter list to only contain approved filetypes
+            files = [f for f in files if has_approved_extension(f)]
             files = sorted(files)
             image_data[dir] = [os.path.join(ux_image_directory_for_static,
                                             dir, 
