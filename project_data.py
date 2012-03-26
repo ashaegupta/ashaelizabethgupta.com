@@ -1,6 +1,5 @@
 import os
 import csv
-import pprint
 from collections import defaultdict
 
 # input files
@@ -21,10 +20,9 @@ def utf_8_encoder(unicode_csv_data):
         yield line.encode('utf-8')
 
 def write_project_data():
-    print "reading csv file..."
+    print "updating project data..."
     reader = csv.reader(open(project_csv_file, 'rb'), delimiter=',')
     data = defaultdict(list)
-    print "creating dict..."
     attrs = ['type', 'name', 'service', 'description', 
              'skills', 'picture', 'my_work_url', 'company_url']
     for row in reader:
@@ -37,7 +35,6 @@ def write_project_data():
                 pass
         data[item['type'].lower()].append(item)
 
-    print "adding other data..."
     data['projects_page'] = 1
     data[u'product_mantra'] = unicode("I believe the secret to great products is to continually ask 'why?' and then serve that deepest need.")
     data[u'development_mantra'] = unicode("Nothing like a good commit.")
@@ -47,17 +44,15 @@ def write_project_data():
 
     print "saving file %s..." % projects_data_py_file
     data_str = "data = %s" % dict(data)
-    print data_str
     projects_data_file = open(projects_data_py_file, mode='w')
     projects_data_file.write(data_str)
     projects_data_file.close()
 
 def write_ux_data():
-    print "reading ux csv file..."
+    print "updating ux project data..."
     reader = csv.reader(open(ux_csv_file, 'rb'), delimiter=',')
     # attributes of the csv file are in the first row
     attrs = reader.next()
-    print "creating dict..."
     data = defaultdict(list)
 
     # for each row in the csv file...
@@ -78,13 +73,12 @@ def write_ux_data():
 
     print "saving file %s..." % ux_data_py_file
     data_str = "data = %s" % dict(data)
-    print pprint.pformat(dict(data))
     ux_data_file = open(ux_data_py_file, mode='w')
     ux_data_file.write(data_str)
     ux_data_file.close()
 
 def write_ux_image_list_data():
-    print "checking contents of /static/images/ux/"
+    print "updating ux image list..."
     image_directories = os.listdir(ux_images_directory)
     image_directories_to_ignore = ['drafts', '.DS_Store']
     image_data = dict()
@@ -100,15 +94,13 @@ def write_ux_image_list_data():
             print "Error: %s" % e
 
     print "saving file %s..." % ux_images_py_file
-    #data_json = simplejson.dumps(image_data)
     data_str = "data = %s" % dict(image_data)
     ux_data_file = open(ux_images_py_file, mode='w')
     ux_data_file.write(data_str)
     ux_data_file.close()
 
 if __name__ == "__main__":
-    print "running..."
     write_project_data()
     write_ux_data()
     write_ux_image_list_data()
-    print "done."
+    print "done updating project data."
