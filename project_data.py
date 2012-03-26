@@ -87,6 +87,7 @@ def write_ux_image_list_data():
             continue
         try:
             files = os.listdir(os.path.join(ux_images_directory, dir))
+            files = sorted(files)
             image_data[dir] = [os.path.join(ux_image_directory_for_static,
                                             dir, 
                                             file) for file in files]
