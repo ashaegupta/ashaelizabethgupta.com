@@ -48,7 +48,7 @@ a {
 }
 
 .header_image:hover {
-    opacity:0.90;
+    opacity:0.9;
 }
 
 
@@ -87,7 +87,7 @@ li {
 	color:grey;
 }
 .main_homepage_text a {
-	color: #393E45;
+	color: grey;
     font-weight: normal;
     text-decoration: none;
 }
