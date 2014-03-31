@@ -1,0 +1,147 @@
+body{
+	margin:4%;
+}
+svg rect{
+	stroke-width:0;
+}
+
+.rust svg rect:nth-of-type(7){
+	fill:orange;
+}
+.rust svg rect:nth-of-type(6){
+	fill:peru;
+}
+.rust svg rect:nth-of-type(5){
+	fill:orange;
+}
+.rust svg rect:nth-of-type(4){
+	fill:lightgoldenrodyellow;
+}
+.rust svg rect:nth-of-type(3){
+	fill:orange;
+}
+.rust svg rect:nth-of-type(2){
+	fill:red;
+}
+.rust svg rect:nth-of-type(1){
+	fill:orange;
+}
+
+
+.outsider svg rect:nth-of-type(7){
+	fill:olive;
+}
+.outsider svg rect:nth-of-type(6){
+	fill:lightgoldenrodyellow;
+}
+.outsider svg rect:nth-of-type(5){
+	fill:olive;
+}
+.outsider svg rect:nth-of-type(4){
+	fill:lightgoldenrodyellow;
+}
+.outsider svg rect:nth-of-type(3){
+	fill:olive;
+}
+.outsider svg rect:nth-of-type(2){
+	fill:orange;
+}
+.outsider svg rect:nth-of-type(1){
+	fill:olive;
+}
+
+
+
+.ribbon svg rect:nth-of-type(7){
+	fill:darkolivegreen;
+}
+.ribbon svg rect:nth-of-type(6){
+	fill:coral;
+}
+.ribbon svg rect:nth-of-type(5){
+	fill:olive;
+}
+.ribbon svg rect:nth-of-type(4){
+	fill:lightgoldenrodyellow;
+}
+.ribbon svg rect:nth-of-type(3){
+	fill:darkolivegreen;
+}
+.ribbon svg rect:nth-of-type(2){
+	fill:crimson;
+}
+.ribbon svg rect:nth-of-type(1){
+	fill:olive;
+}
+
+
+
+.blush svg rect:nth-of-type(7){
+	fill:indianred;
+}
+.blush svg rect:nth-of-type(6){
+	fill:coral;
+}
+.blush svg rect:nth-of-type(5){
+	fill:lightgoldenrodyellow;
+}
+.blush svg rect:nth-of-type(4){
+	fill:lightcoral;
+}
+.blush svg rect:nth-of-type(3){
+	fill:indianred;
+}
+.blush svg rect:nth-of-type(2){
+	fill:coral;
+}
+.blush svg rect:nth-of-type(1){
+	fill:indianred;
+}
+
+
+
+.summer svg rect:nth-of-type(7){
+	fill:darkblue;
+}
+.summer svg rect:nth-of-type(6){
+	fill:crimson;
+}
+.summer svg rect:nth-of-type(5){
+	fill:darkblue;
+}
+.summer svg rect:nth-of-type(4){
+	fill:darkorange;
+}
+.summer svg rect:nth-of-type(3){
+	fill:darkblue;
+}
+.summer svg rect:nth-of-type(2){
+	fill:crimson;
+}
+.summer svg rect:nth-of-type(1){
+	fill:darkblue;
+}
+
+
+
+.sway svg rect:nth-of-type(7){
+	fill:darkslategrey;
+}
+.sway svg rect:nth-of-type(6){
+	fill:gold;
+}
+.sway svg rect:nth-of-type(5){
+	fill:darkslategrey;
+}
+.sway svg rect:nth-of-type(4){
+	fill:darksalmon;
+}
+.sway svg rect:nth-of-type(3){
+	fill:darkslategrey;
+}
+.sway svg rect:nth-of-type(2){
+	fill:cadetblue;
+}
+.sway svg rect:nth-of-type(1){
+	fill:darkslategrey;
+}
