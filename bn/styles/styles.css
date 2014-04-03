@@ -145,3 +145,50 @@ svg rect{
 .sway svg rect:nth-of-type(1){
 	fill:darkslategrey;
 }
+
+
+
+.sitar svg rect:nth-of-type(7){
+	fill:brown;
+}
+.sitar svg rect:nth-of-type(6){
+	fill:tomato;
+}
+.sitar svg rect:nth-of-type(5){
+	fill:brown;
+}
+.sitar svg rect:nth-of-type(4){
+	fill:gold;
+}
+.sitar svg rect:nth-of-type(3){
+	fill:brown;
+}
+.sitar svg rect:nth-of-type(2){
+	fill:tomato;
+}
+.sitar svg rect:nth-of-type(1){
+	fill:brown;
+}
+
+
+.slowdown svg rect:nth-of-type(7){
+	fill:lightskyblue;
+}
+.slowdown svg rect:nth-of-type(6){
+	fill:darkorange;
+}
+.slowdown svg rect:nth-of-type(5){
+	fill:lightskyblue;
+}
+.slowdown svg rect:nth-of-type(4){
+	fill:orange;
+}
+.slowdown svg rect:nth-of-type(3){
+	fill:lightskyblue;
+}
+.slowdown svg rect:nth-of-type(2){
+	fill:gold;
+}
+.slowdown svg rect:nth-of-type(1){
+	fill:lightskyblue;
+}
