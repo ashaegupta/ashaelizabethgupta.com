@@ -1,5 +1,5 @@
 $(document).ready(function(){
-	var collection=["rust","outsider","ribbon","blush","summer", "sway", "sitar", "slowdown"];
+	var collection=["rust","outsider","ribbon","blush","summer","sitar","saturday", "fresh"];
 	var i = 0;
 	
 	var rotate = function() {

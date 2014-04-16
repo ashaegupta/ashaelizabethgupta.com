@@ -192,3 +192,47 @@ svg rect{
 .slowdown svg rect:nth-of-type(1){
 	fill:lightskyblue;
 }
+
+.saturday svg rect:nth-of-type(7){
+	fill:#966CB5;
+}
+.saturday svg rect:nth-of-type(6){
+	fill:#B15769;
+}
+.saturday svg rect:nth-of-type(5){
+	fill:#B15769;
+}
+.saturday svg rect:nth-of-type(4){
+	fill:#E59084;
+}
+.saturday svg rect:nth-of-type(3){
+	fill:#966CB5;
+}
+.saturday svg rect:nth-of-type(2){
+	fill:#B15769;
+}
+.saturday svg rect:nth-of-type(1){
+	fill:#B15769;
+}
+
+.fresh svg rect:nth-of-type(7){
+	fill:#71987A;
+}
+.fresh svg rect:nth-of-type(6){
+	fill:#C1B738;
+}
+.fresh svg rect:nth-of-type(5){
+	fill:#C1B738;
+}
+.fresh svg rect:nth-of-type(4){
+	fill:#445C4A;
+}
+.fresh svg rect:nth-of-type(3){
+	fill:#71987A;
+}
+.fresh svg rect:nth-of-type(2){
+	fill:#445C4A;
+}
+.fresh svg rect:nth-of-type(1){
+	fill:#C1B738;
+}
