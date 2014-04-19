@@ -5,6 +5,7 @@ body {
     color: #393E45;
     margin: 0px !important;
 }
+
 a {
     text-decoration: none;
     color: #AAA;
@@ -96,12 +97,16 @@ li {
 	margin-top: 12px;
 }
 
-#standout a {
-	color: #A878E3;
+.main_homepage_text a {
+    color: #A878E3;
 }
 
 .main_homepage_text a:hover {
-	opacity:0.95;
+    color: black;
+}
+
+#standout a {
+	color: #A878E3;
 }
 
 .image {
