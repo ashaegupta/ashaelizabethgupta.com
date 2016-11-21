@@ -1,7 +1,7 @@
 # render html files for the project using jinja2 templates
 
 import codecs
-import simplejson
+import json as simplejson
 from jinja2 import Environment, FileSystemLoader
 from project_data.outputs import project_data, ux_data, ux_images
 

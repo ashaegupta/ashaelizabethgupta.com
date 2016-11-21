@@ -1,7 +1,7 @@
 body {
     /* default text settings */
     font-family: "Helvetica Neue", Arial, Helvetica, sans-serif;
-    font-size:13px;
+    font-size:15px;
     color: #393E45;
     margin: 0px !important;
 }
@@ -15,7 +15,6 @@ a {
     width: 850;
     margin-left: auto;
     margin-right: auto;
-    line-height: 19px;
 }
 
 /*
@@ -56,7 +55,7 @@ a {
 ul {
     list-style-type: none;
     padding-left: 20px;
-    margin-top: 20px;
+    margin-top: 5px;
     width: 60;
 }
 li {
@@ -84,7 +83,6 @@ li {
 .main_homepage_text {
     margin-top: 30px;
     width: 600px;
-    font-size:14px;
 	color:grey;
 }
 .main_homepage_text a {
@@ -95,6 +93,7 @@ li {
 
 .main_homepage_text p {
 	margin-top: 12px;
+    line-height: 20px;
 }
 
 .main_homepage_text a {
@@ -135,8 +134,7 @@ li {
 #project_categories_header {
     padding-top: 10px;
     padding-bottom: 10px;
-    border-bottom: 3px solid black;
-    margin-bottom: 20px;
+    margin-bottom: 25px;
 }
 .project_category {
     display: inline-block;
@@ -147,17 +145,16 @@ li {
     display: none;    
 }
 .project_category_purple_bar {
-    border-radius: 10px;
+    border-radius: 2px;
     background: #A878E3;
-    height: 6px;
-    margin-bottom: 3px;
+    height: 2px;
+    margin-bottom: 10px;
     display: none;
 }
 .project_mantra {
     color: #A878E3;
     padding-top:10px;
     margin-bottom: 30px;
-    font-size: 14px;
 }
 .project {
     margin-bottom:40px;
@@ -203,6 +200,7 @@ li {
 }
 .project_description_short {
     display: inline-block;
+    color: lightgray; 
 }
 .project_description_long {
     margin-top: 10px;
@@ -210,7 +208,8 @@ li {
     line-height: 130%;
 }
 .project_tags {
-   margin-top: 10px; 
+   margin-top: 10px;
+   color: lightgray;
 }
 
 .ux {
@@ -269,7 +268,6 @@ li {
 
 .picture_help {
     font-family: "Gill Sans", Arial, Helvetica, sans-serif;
-    font-size: 14px;
     font-weight: 350;
     position: relative;
     float: left;
@@ -293,7 +291,6 @@ li {
 
 #picture_caption {
     font-family: "Gill Sans", Arial, Helvetica, sans-serif;
-    font-size: 14px;
     font-weight: 350;
     padding-top: 10px;
     padding-left: 1px;
